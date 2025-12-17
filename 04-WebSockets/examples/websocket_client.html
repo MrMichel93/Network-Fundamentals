@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .status {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.connected {
+            background: #28a745;
+            box-shadow: 0 0 10px #28a745;
+        }
+        
+        .status-indicator.disconnected {
+            background: #dc3545;
+        }
+        
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .message.sent {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.received {
+            background: white;
+            border: 1px solid #dee2e6;
+        }
+        
+        .message.system {
+            background: #ffc107;
+            color: #333;
+            text-align: center;
+            margin: 10px auto;
+            max-width: 100%;
+        }
+        
+        .message-content {
+            margin-bottom: 5px;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .button-group button {
+            flex: 1;
+        }
+        
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 WebSocket Client</h1>
+            <p>Real-time bidirectional communication demo</p>
+        </div>
+        
+        <div class="status">
+            <div>
+                <span class="status-indicator disconnected" id="statusIndicator"></span>
+                <span id="statusText">Disconnected</span>
+            </div>
+            <span id="clientCount">0 clients online</span>
+        </div>
+        
+        <div class="error" id="errorMessage"></div>
+        
+        <div class="messages" id="messages">
+            <div class="message system">
+                <div class="message-content">👋 Click "Connect" to start!</div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input 
+                type="text" 
+                id="messageInput" 
+                placeholder="Type a message..." 
+                disabled
+            >
+            <button id="sendButton" disabled>Send</button>
+        </div>
+        
+        <div class="button-group">
+            <button id="connectButton">Connect</button>
+            <button id="disconnectButton" disabled>Disconnect</button>
+            <button id="clearButton">Clear Messages</button>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        const wsUrl = 'ws://localhost:8000';
+        
+        // DOM elements
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const clientCount = document.getElementById('clientCount');
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const connectButton = document.getElementById('connectButton');
+        const disconnectButton = document.getElementById('disconnectButton');
+        const clearButton = document.getElementById('clearButton');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Connect to WebSocket server
+        function connect() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                return;
+            }
+            
+            addSystemMessage('Connecting to server...');
+            
+            try {
+                socket = new WebSocket(wsUrl);
+                
+                socket.onopen = () => {
+                    console.log('WebSocket connected');
+                    updateStatus(true);
+                    addSystemMessage('✅ Connected to server!');
+                    hideError();
+                };
+                
+                socket.onmessage = (event) => {
+                    console.log('Received:', event.data);
+                    handleMessage(event.data);
+                };
+                
+                socket.onclose = () => {
+                    console.log('WebSocket disconnected');
+                    updateStatus(false);
+                    addSystemMessage('🔌 Disconnected from server');
+                };
+                
+                socket.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    showError('Connection error! Make sure the server is running.');
+                };
+                
+            } catch (error) {
+                console.error('Failed to connect:', error);
+                showError('Failed to connect to server');
+            }
+        }
+        
+        // Disconnect from server
+        function disconnect() {
+            if (socket) {
+                socket.close();
+                socket = null;
+            }
+        }
+        
+        // Send message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            
+            if (!message || !socket || socket.readyState !== WebSocket.OPEN) {
+                return;
+            }
+            
+            const data = {
+                type: 'message',
+                content: message,
+                timestamp: new Date().toISOString()
+            };
+            
+            socket.send(JSON.stringify(data));
+            addMessage('You', message, 'sent');
+            messageInput.value = '';
+        }
+        
+        // Handle incoming message
+        function handleMessage(data) {
+            try {
+                const message = JSON.parse(data);
+                
+                switch (message.type) {
+                    case 'system':
+                    case 'user_joined':
+                    case 'user_left':
+                        addSystemMessage(message.message);
+                        if (message.client_count !== undefined) {
+                            clientCount.textContent = `${message.client_count} clients online`;
+                        }
+                        break;
+                    
+                    case 'message':
+                        const sender = message.from === 'You' ? 'You' : `Client ${message.from}`;
+                        addMessage(sender, message.content, 'received');
+                        break;
+                    
+                    case 'echo':
+                        addMessage('Server', message.original, 'received');
+                        break;
+                    
+                    case 'pong':
+                        addSystemMessage('🏓 Pong received');
+                        break;
+                    
+                    default:
+                        console.log('Unknown message type:', message);
+                }
+            } catch (error) {
+                console.error('Error parsing message:', error);
+                addMessage('Server', data, 'received');
+            }
+        }
+        
+        // Add message to UI
+        function addMessage(sender, content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const time = new Date().toLocaleTimeString();
+            messageDiv.innerHTML = `
+                <div class="message-content"><strong>${sender}:</strong> ${content}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // Add system message
+        function addSystemMessage(content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            
+            const time = new Date().toLocaleTimeString();
+            messageDiv.innerHTML = `
+                <div class="message-content">${content}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // Update connection status
+        function updateStatus(connected) {
+            if (connected) {
+                statusIndicator.className = 'status-indicator connected';
+                statusText.textContent = 'Connected';
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                connectButton.disabled = true;
+                disconnectButton.disabled = false;
+            } else {
+                statusIndicator.className = 'status-indicator disconnected';
+                statusText.textContent = 'Disconnected';
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+                connectButton.disabled = false;
+                disconnectButton.disabled = true;
+                clientCount.textContent = '0 clients online';
+            }
+        }
+        
+        // Show error
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+        
+        // Hide error
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+        
+        // Clear messages
+        function clearMessages() {
+            messagesDiv.innerHTML = '';
+            addSystemMessage('Messages cleared');
+        }
+        
+        // Event listeners
+        connectButton.addEventListener('click', connect);
+        disconnectButton.addEventListener('click', disconnect);
+        clearButton.addEventListener('click', clearMessages);
+        sendButton.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Send ping every 30 seconds to keep connection alive
+        setInterval(() => {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
