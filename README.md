@@ -6,8 +6,8 @@ Welcome to the **Networking Fundamentals** course! This comprehensive course is 
 
 This course will take you from basic networking concepts to building real-time web applications. You'll learn how data flows across the internet, how to build and consume APIs, and how to create interactive networked applications.
 
-**Estimated Time:** 10-14 weeks (4 hours per week) or 13-19 weeks (3 hours per week)  
 **Total Course Hours:** 39-56 hours  
+**Estimated Time:** 13-19 weeks (3 hours/week), 10-14 weeks (4 hours/week), or 8-11 weeks (5 hours/week)  
 **Target Audience:** High school students or self-learners with basic programming knowledge
 
 ## 📚 What You'll Learn
@@ -159,19 +159,19 @@ Before diving into the course, take this quick diagnostic quiz to gauge your rea
 - **0-5 points:** *Foundation Builder*
   - **Recommendation:** Consider taking a programming fundamentals course first, then start this course
   - **Resources:** Check out [00-Prerequisites](./00-Prerequisites/) for refresher materials
-  - **Timeline:** Complete foundation courses first, then follow the standard 13-19 weeks at 3 hours/week
+  - **Timeline:** Complete foundation courses first, then plan for 13-19 weeks at 3 hours/week
   - **Next Steps:** Focus on Python basics and command-line comfort before starting Module 00
 
 - **6-10 points:** *Ready Learner*
   - **Recommendation:** You're ready for this course, but it will challenge you (in a good way!)
   - **Resources:** Review [00-Prerequisites](./00-Prerequisites/) for any weak areas
-  - **Timeline:** Standard pace of 10-14 weeks at 4 hours/week, or 13-19 weeks at 3 hours/week
+  - **Timeline:** Standard pace of 13-19 weeks at 3 hours/week, or 10-14 weeks at 4 hours/week
   - **Next Steps:** Start with Module 00, take detailed notes, and don't skip exercises
 
 - **11-15 points:** *Fast Tracker*
   - **Recommendation:** Perfect fit! You can move quickly through early modules
   - **Resources:** You might skim [00-Prerequisites](./00-Prerequisites/) and focus on projects
-  - **Timeline:** Accelerated pace of 10-14 weeks at 4+ hours/week with lighter modules moving faster
+  - **Timeline:** Accelerated pace of 8-11 weeks at 5 hours/week, moving faster through familiar content
   - **Next Steps:** Challenge yourself with the advanced exercises and projects
 
 ### 📚 Prerequisites Refresher Resources
@@ -280,19 +280,28 @@ For detailed setup instructions for different operating systems, see [setup.md](
 - 🟠 **Orange (Production Ready):** Modules 04-06 - Advanced protocols and security
 - 🟢 **Green (Application):** Projects - Hands-on implementation
 
-**Recommended pace (at 4 hours/week):**
-- Weeks 1-2: Prerequisites + How The Internet Works
-- Weeks 3-4: HTTP Fundamentals
-- Weeks 5-6: REST APIs
-- Weeks 7-8: WebSockets
-- Weeks 9-10: Other Protocols + Security Basics
-- Weeks 11-14: Final Projects
+**Recommended pace (at 4 hours/week, 10-14 weeks total):**
+- Weeks 1-2: Prerequisites (2-3h) + How The Internet Works (4-6h)
+- Weeks 3-4: HTTP Fundamentals (5-7h)
+- Weeks 5-6: REST APIs (6-8h)
+- Weeks 7-8: WebSockets (5-7h)
+- Weeks 9-10: Other Protocols (4-6h) + Security Basics (5-7h)
+- Weeks 11-14: Final Projects (8-12h)
 
-**Accelerated pace (at 6+ hours/week):**
+**Standard pace (at 3 hours/week, 13-19 weeks total):**
+- Weeks 1-3: Prerequisites + How The Internet Works
+- Weeks 4-6: HTTP Fundamentals
+- Weeks 7-9: REST APIs
+- Weeks 10-12: WebSockets
+- Weeks 13-15: Other Protocols + Security Basics
+- Weeks 16-19: Final Projects
+
+**Accelerated pace (at 5 hours/week, 8-11 weeks total):**
 - Weeks 1-2: Prerequisites + How The Internet Works + HTTP Fundamentals
-- Weeks 3-4: REST APIs + WebSockets
-- Weeks 5-6: Other Protocols + Security Basics
-- Weeks 7-10: Final Projects
+- Weeks 3-4: REST APIs
+- Weeks 5-6: WebSockets + Other Protocols
+- Weeks 7-8: Security Basics
+- Weeks 9-11: Final Projects
 
 ## 🧪 Assessment
 
