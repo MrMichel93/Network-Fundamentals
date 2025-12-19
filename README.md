@@ -157,21 +157,21 @@ Before diving into the course, take this quick diagnostic quiz to gauge your rea
 **Total your score and find your level:**
 
 - **0-5 points:** *Foundation Builder*
-  - **Recommendation:** Consider taking a programming fundamentals course first
+  - **Recommendation:** Consider taking a programming fundamentals course first, then start this course
   - **Resources:** Check out [00-Prerequisites](./00-Prerequisites/) for refresher materials
-  - **Timeline:** Plan for 16-20 weeks with extra practice time (2 hours/week)
-  - **Next Steps:** Focus on Python basics and command-line comfort before Module 01
+  - **Timeline:** Complete foundation courses first, then follow the standard 13-19 weeks at 3 hours/week
+  - **Next Steps:** Focus on Python basics and command-line comfort before starting Module 00
 
 - **6-10 points:** *Ready Learner*
   - **Recommendation:** You're ready for this course, but it will challenge you (in a good way!)
   - **Resources:** Review [00-Prerequisites](./00-Prerequisites/) for any weak areas
-  - **Timeline:** Follow the standard 13-19 weeks at 3 hours/week, or accelerate to 10-14 weeks at 4 hours/week
+  - **Timeline:** Standard pace of 10-14 weeks at 4 hours/week, or 13-19 weeks at 3 hours/week
   - **Next Steps:** Start with Module 00, take detailed notes, and don't skip exercises
 
 - **11-15 points:** *Fast Tracker*
   - **Recommendation:** Perfect fit! You can move quickly through early modules
   - **Resources:** You might skim [00-Prerequisites](./00-Prerequisites/) and focus on projects
-  - **Timeline:** You could complete this in 8-10 weeks at 5-6 hours/week if focused
+  - **Timeline:** Accelerated pace of 10-14 weeks at 4+ hours/week with lighter modules moving faster
   - **Next Steps:** Challenge yourself with the advanced exercises and projects
 
 ### 📚 Prerequisites Refresher Resources
