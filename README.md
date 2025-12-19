@@ -36,9 +36,9 @@ Unlike traditional networking courses that treat security as an afterthought or 
 ### Why Security-First Matters
 
 **This is DevSecOps in practice** - security as a core principle, not an addon. In the real world:
-- 🚨 **43% of cyberattacks** target small businesses and applications with poor security
-- 💰 **Average data breach cost**: $4.45 million (2023)
-- ⚡ **Cost to fix security issues**: 100x more expensive in production than during development
+- 🚨 **Security breaches are common** - small businesses and applications with poor security are frequent targets
+- 💰 **Data breaches are expensive** - costs can reach millions in damages, legal fees, and reputation loss
+- ⚡ **Prevention is cheaper than fixes** - addressing security during development is far more cost-effective than fixing vulnerabilities in production
 
 By learning security practices alongside networking fundamentals, you'll:
 - ✅ Build secure applications by default
@@ -300,12 +300,12 @@ This course prepares you for measurable improvements in real-world development s
 
 ### Target Outcomes
 
-| Metric | Before This Course | After This Course | Industry Standard |
-|--------|-------------------|-------------------|-------------------|
-| **API Response Time Understanding** | Unknown | < 200ms for standard requests | < 100ms optimal |
-| **Debugging Network Issues** | Hours of guesswork | 15-30 minutes with tools | < 30 minutes |
-| **API Design Quality** | Inconsistent patterns | RESTful best practices | Industry standard |
-| **Security Awareness** | Basic/None | OWASP Top 10 awareness | Essential knowledge |
+| Metric | Before This Course | After This Course | Industry Goal |
+|--------|-------------------|-------------------|---------------|
+| **API Response Time Understanding** | Unknown | Understand performance expectations | Optimize for user experience |
+| **Debugging Network Issues** | Hours of guesswork | Systematic debugging with tools | Quick problem resolution |
+| **API Design Quality** | Inconsistent patterns | RESTful best practices | Industry standard patterns |
+| **Security Awareness** | Basic/None | OWASP Top 10 awareness | Security-conscious development |
 | **Protocol Knowledge** | HTTP only | HTTP, WebSocket, TCP/UDP, SSH | Multi-protocol fluency |
 
 ### Your Personal Success Rubric
@@ -357,16 +357,16 @@ This course focuses on specific tools for learning, but the concepts transfer to
 
 | Category | This Course Uses | Industry Alternatives | When to Consider Alternatives |
 |----------|------------------|----------------------|-------------------------------|
-| **Programming Language** | Python | JavaScript/Node.js, Go, Java, C# | • JavaScript for full-stack web dev<br>• Go for high-performance services<br>• Java/C# for enterprise environments |
-| **HTTP Client** | `requests` library, curl | `axios`, `fetch`, `httpx` | • `axios` for JavaScript projects<br>• `httpx` for async Python<br>• Browser `fetch` for frontend |
-| **API Testing** | Postman, curl | Insomnia, HTTPie, REST Client (VS Code) | • Insomnia for GraphQL focus<br>• HTTPie for better CLI experience<br>• REST Client for in-editor testing |
-| **WebSocket Library** | `websockets` (Python) | Socket.IO, ws (Node.js) | • Socket.IO for fallback support<br>• Native WebSocket for simple cases |
-| **Web Framework** | Flask | FastAPI, Django, Express.js | • FastAPI for modern Python + async<br>• Django for full-featured apps<br>• Express.js for Node.js ecosystem |
-| **Code Editor** | Any (VS Code recommended) | PyCharm, Sublime Text, Vim | • PyCharm for advanced Python IDE<br>• Vim for terminal-based editing |
-| **Version Control** | Git + GitHub | GitLab, Bitbucket, Gitea | • GitLab for built-in CI/CD<br>• Bitbucket for Atlassian integration<br>• Gitea for self-hosting |
-| **API Documentation** | Markdown, Manual | Swagger/OpenAPI, Postman Docs | • Swagger for interactive API docs<br>• When building production APIs |
-| **Network Debugging** | Browser DevTools, curl | Wireshark, Charles Proxy, tcpdump | • Wireshark for packet analysis<br>• Charles Proxy for mobile debugging<br>• tcpdump for server-side capture |
-| **Security Testing** | Manual methods | OWASP ZAP, Burp Suite, Nmap | • Production security audits<br>• Professional penetration testing |
+| **Programming Language** | Python | JavaScript/Node.js, Go, Java, C# | JavaScript for full-stack web, Go for high-performance, Java/C# for enterprise |
+| **HTTP Client** | `requests` library, curl | `axios`, `fetch`, `httpx` | axios for JavaScript, httpx for async Python, fetch for frontend |
+| **API Testing** | Postman, curl | Insomnia, HTTPie, REST Client | Insomnia for GraphQL, HTTPie for better CLI, REST Client for in-editor testing |
+| **WebSocket Library** | `websockets` (Python) | Socket.IO, ws (Node.js) | Socket.IO for fallback support, native WebSocket for simple cases |
+| **Web Framework** | Flask | FastAPI, Django, Express.js | FastAPI for modern Python + async, Django for full-featured apps, Express.js for Node.js |
+| **Code Editor** | Any (VS Code recommended) | PyCharm, Sublime Text, Vim | PyCharm for advanced Python IDE, Vim for terminal-based editing |
+| **Version Control** | Git + GitHub | GitLab, Bitbucket, Gitea | GitLab for built-in CI/CD, Bitbucket for Atlassian integration, Gitea for self-hosting |
+| **API Documentation** | Markdown, Manual | Swagger/OpenAPI, Postman Docs | Swagger for interactive API docs when building production APIs |
+| **Network Debugging** | Browser DevTools, curl | Wireshark, Charles Proxy, tcpdump | Wireshark for packet analysis, Charles Proxy for mobile debugging, tcpdump for server-side |
+| **Security Testing** | Manual methods | OWASP ZAP, Burp Suite, Nmap | Production security audits and professional penetration testing |
 
 ### 📚 Learning Path After This Course
 
