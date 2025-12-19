@@ -62,7 +62,7 @@ By learning security practices alongside networking fundamentals, you'll:
 | **06** | [Security Basics](./06-Security-Basics/) | 5-7 hours | Modules 00-05 complete | HTTPS/TLS, authentication, common vulnerabilities, security best practices |
 | **Projects** | [Hands-on Projects](./Projects/) | 8-12 hours | All modules complete | Integration of all concepts, full-stack development, debugging |
 
-**Total Course Time:** 39-56 hours (approximately 13-19 weeks at 3 hours per week, or 10-14 weeks at 4 hours per week)
+**Total Course Time:** 39-56 hours (approximately 13-19 weeks at 3 hours/week, 10-14 weeks at 4 hours/week, or 8-11 weeks at 5 hours/week)
 
 ### Detailed Module Descriptions
 
@@ -276,9 +276,9 @@ For detailed setup instructions for different operating systems, see [setup.md](
 ```
 
 **Color Coding Guide:**
-- 🔵 **Blue (Foundations):** Modules 00-03 - Core networking concepts and HTTP fundamentals
-- 🟠 **Orange (Production Ready):** Modules 04-06 - Advanced protocols and security
-- 🟢 **Green (Application):** Projects - Hands-on implementation
+- 🔵 **Blue (Foundations):** Modules 00-03 - Core networking concepts, HTTP, and REST fundamentals
+- 🟠 **Orange (Advanced & Production Ready):** Modules 04-06 - Real-time protocols, other protocols, and security
+- 🟢 **Green (Application):** Projects - Hands-on implementation and integration
 
 **Recommended pace (at 4 hours/week, 10-14 weeks total):**
 - Weeks 1-2: Prerequisites (2-3h) + How The Internet Works (4-6h)
