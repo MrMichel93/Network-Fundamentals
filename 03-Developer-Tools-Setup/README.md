@@ -75,6 +75,28 @@ Click on any request to see:
 - Connection time
 - Server response time
 
+#### Common Debugging Tasks
+
+**Finding failed requests:**
+- Look for red status codes (4xx, 5xx)
+- Filter by status in the Network tab
+- Check error messages in Response tab
+
+**Checking request payload:**
+- For POST/PUT requests, view the "Payload" or "Request" tab
+- Verify JSON formatting and data values
+- Check Content-Type header matches the payload
+
+**Verifying headers:**
+- Inspect Request Headers to ensure proper authentication, content-type, etc.
+- Check Response Headers for caching, CORS policies
+- Look for custom headers your API requires
+
+**Analyzing load time:**
+- Sort requests by Time column to find slowest resources
+- Use Timing tab to identify bottlenecks (DNS, connection, server response)
+- Check for waterfall patterns showing resource dependencies
+
 ### Practical Network Tab Exercises
 
 #### Exercise 1: Inspect a Simple Request
