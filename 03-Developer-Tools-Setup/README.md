@@ -99,7 +99,7 @@ Click on any request to see:
 
 ### Practical Network Tab Exercises
 
-#### Exercise 1: Inspect a Simple Request
+#### Basic Exercise: Inspect a Simple Request
 
 1. Open Network tab
 2. Visit https://example.com
@@ -131,7 +131,7 @@ Visit your favorite website and:
 5. Which request took longest?
 6. Any failed requests?
 
-#### Exercise 2: Filter Requests
+#### Additional Exercise: Filter Requests
 
 The Network tab has filters at the top:
 - **All**: Show everything
@@ -143,7 +143,7 @@ The Network tab has filters at the top:
 
 Try visiting a complex website and filtering by different types!
 
-#### Exercise 3: Throttle Network Speed
+#### Additional Exercise: Throttle Network Speed
 
 Simulate slow connections:
 1. Click the dropdown that says "No throttling"
