@@ -1,0 +1,13 @@
+# Requirements for Authentication Examples
+
+# Flask - Web framework
+flask>=2.3.0
+
+# bcrypt - Password hashing
+bcrypt>=4.0.0
+
+# PyJWT - JSON Web Token implementation
+pyjwt>=2.8.0
+
+# requests - HTTP library for OAuth example
+requests>=2.31.0
