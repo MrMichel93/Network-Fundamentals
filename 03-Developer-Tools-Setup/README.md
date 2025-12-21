@@ -89,6 +89,26 @@ Click on any request to see:
    - Content-Type header
    - User-Agent header
 
+#### Hands-On Exercise 1
+
+Open https://jsonplaceholder.typicode.com and:
+1. Open DevTools Network tab
+2. Click on the page to trigger requests
+3. Find the API request
+4. Examine the response
+5. Note the status code
+6. Check the response time
+
+#### Hands-On Exercise 2
+
+Visit your favorite website and:
+1. Clear network log
+2. Reload the page
+3. How many requests were made?
+4. What types of resources loaded?
+5. Which request took longest?
+6. Any failed requests?
+
 #### Exercise 2: Filter Requests
 
 The Network tab has filters at the top:
@@ -195,6 +215,21 @@ You'll see:
 2. Name it "Network Fundamentals Practice"
 3. Add requests to it
 
+### Hands-On Exercise 1: Public API Practice
+
+Use JSONPlaceholder to:
+1. GET a list of posts
+2. GET a single post
+3. POST a new post
+4. PUT to update a post
+5. DELETE a post
+
+### Hands-On Exercise 2: Working with Headers
+
+1. Add custom headers
+2. Observe how they appear in response
+3. Try authentication headers (preview)
+
 ## curl: Command-Line HTTP Tool 💻
 
 curl is a powerful command-line tool for making HTTP requests. It's available on almost every system.
@@ -281,6 +316,27 @@ curl -L https://github.com
 ```
 
 The `-L` flag tells curl to follow redirects.
+
+### Hands-On Exercise 1
+
+Run these commands and observe the output:
+```bash
+curl https://httpbin.org/get
+curl -i https://httpbin.org/status/404
+curl -X POST https://httpbin.org/post -d "name=test"
+```
+
+### Hands-On Exercise 2: Debug a Website
+
+```bash
+curl -v https://www.example.com
+```
+
+Analyze:
+- DNS resolution time
+- TLS handshake
+- Headers sent/received
+- Response time
 
 ### curl Cheat Sheet
 
@@ -380,6 +436,18 @@ http --download https://example.com/file.zip
 ```bash
 http --headers https://api.github.com/users/octocat
 ```
+
+### Comparison with curl
+
+| Task | curl | HTTPie |
+|------|------|--------|
+| GET | `curl url` | `http GET url` |
+| POST JSON | `curl -X POST url -H "Content-Type: application/json" -d '{"key":"value"}'` | `http POST url key=value` |
+| Custom header | `curl -H "X-Custom: value" url` | `http GET url X-Custom:value` |
+
+### Practice Exercise
+
+Do the same requests in both curl and HTTPie, compare ease of use.
 
 ### HTTPie vs curl
 
