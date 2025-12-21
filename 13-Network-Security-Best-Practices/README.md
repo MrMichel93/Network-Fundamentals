@@ -193,29 +193,6 @@ Imagine a bank vault:
 
 Same principle applies to network security!
 
-### Security Layers
-
-```
-Layer 1: Network Level
-- Firewalls
-- VPNs
-- Network segmentation
-
-Layer 2: Application Level
-- Input validation
-- Authentication/Authorization
-- Secure coding practices
-
-Layer 3: Data Level
-- Encryption at rest
-- Encryption in transit
-- Access controls
-
-Layer 4: Physical Level
-- Server security
-- Access controls to hardware
-```
-
 ## Comprehensive Security Checklist ✅
 
 ### 1. Authentication & Access Control
