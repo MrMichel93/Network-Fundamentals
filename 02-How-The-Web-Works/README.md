@@ -81,10 +81,9 @@ A **URL (Uniform Resource Locator)** is the address of a resource on the web.
 ### Anatomy of a URL
 
 ```
-https://www.example.com:443/path/to/page?key=value#section
-└─┬─┘  └────┬─────────┘└─┬─┘└─────┬─────┘└────┬────┘└───┬──┘
-  │         │            │         │           │         │
-Protocol  Domain       Port      Path       Query    Fragment
+https://api.example.com:443/v1/users?id=123#section
+└─┬─┘  └──────┬────────┘ └┬┘ └───┬───┘ └──┬───┘ └──┬──┘
+Protocol   Domain       Port  Path   Query  Fragment
 ```
 
 Let's break it down:

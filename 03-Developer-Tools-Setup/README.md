@@ -75,9 +75,31 @@ Click on any request to see:
 - Connection time
 - Server response time
 
+#### Common Debugging Tasks
+
+**Finding failed requests:**
+- Look for red status codes (4xx, 5xx)
+- Filter by status in the Network tab
+- Check error messages in Response tab
+
+**Checking request payload:**
+- For POST/PUT requests, view the "Payload" or "Request" tab
+- Verify JSON formatting and data values
+- Check Content-Type header matches the payload
+
+**Verifying headers:**
+- Inspect Request Headers to ensure proper authentication, content-type, etc.
+- Check Response Headers for caching, CORS policies
+- Look for custom headers your API requires
+
+**Analyzing load time:**
+- Sort requests by Time column to find slowest resources
+- Use Timing tab to identify bottlenecks (DNS, connection, server response)
+- Check for waterfall patterns showing resource dependencies
+
 ### Practical Network Tab Exercises
 
-#### Exercise 1: Inspect a Simple Request
+#### Basic Exercise: Inspect a Simple Request
 
 1. Open Network tab
 2. Visit https://example.com
@@ -89,7 +111,27 @@ Click on any request to see:
    - Content-Type header
    - User-Agent header
 
-#### Exercise 2: Filter Requests
+#### Hands-On Exercise 1
+
+Open https://jsonplaceholder.typicode.com and:
+1. Open DevTools Network tab
+2. Click on the page to trigger requests
+3. Find the API request
+4. Examine the response
+5. Note the status code
+6. Check the response time
+
+#### Hands-On Exercise 2
+
+Visit your favorite website and:
+1. Clear network log
+2. Reload the page
+3. How many requests were made?
+4. What types of resources loaded?
+5. Which request took longest?
+6. Any failed requests?
+
+#### Additional Exercise: Filter Requests
 
 The Network tab has filters at the top:
 - **All**: Show everything
@@ -101,7 +143,7 @@ The Network tab has filters at the top:
 
 Try visiting a complex website and filtering by different types!
 
-#### Exercise 3: Throttle Network Speed
+#### Additional Exercise: Throttle Network Speed
 
 Simulate slow connections:
 1. Click the dropdown that says "No throttling"
@@ -195,6 +237,21 @@ You'll see:
 2. Name it "Network Fundamentals Practice"
 3. Add requests to it
 
+### Hands-On Exercise 1: Public API Practice
+
+Use JSONPlaceholder to:
+1. GET a list of posts
+2. GET a single post
+3. POST a new post
+4. PUT to update a post
+5. DELETE a post
+
+### Hands-On Exercise 2: Working with Headers
+
+1. Add custom headers
+2. Observe how they appear in response
+3. Try authentication headers (preview)
+
 ## curl: Command-Line HTTP Tool 💻
 
 curl is a powerful command-line tool for making HTTP requests. It's available on almost every system.
@@ -281,6 +338,27 @@ curl -L https://github.com
 ```
 
 The `-L` flag tells curl to follow redirects.
+
+### Hands-On Exercise 1
+
+Run these commands and observe the output:
+```bash
+curl https://httpbin.org/get
+curl -i https://httpbin.org/status/404
+curl -X POST https://httpbin.org/post -d "name=test"
+```
+
+### Hands-On Exercise 2: Debug a Website
+
+```bash
+curl -v https://www.example.com
+```
+
+Analyze:
+- DNS resolution time
+- TLS handshake
+- Headers sent/received
+- Response time
 
 ### curl Cheat Sheet
 
@@ -380,6 +458,18 @@ http --download https://example.com/file.zip
 ```bash
 http --headers https://api.github.com/users/octocat
 ```
+
+### Comparison with curl
+
+| Task | curl | HTTPie |
+|------|------|--------|
+| GET | `curl url` | `http GET url` |
+| POST JSON | `curl -X POST url -H "Content-Type: application/json" -d '{"key":"value"}'` | `http POST url key=value` |
+| Custom header | `curl -H "X-Custom: value" url` | `http GET url X-Custom:value` |
+
+### Practice Exercise
+
+Do the same requests in both curl and HTTPie, compare ease of use.
 
 ### HTTPie vs curl
 
