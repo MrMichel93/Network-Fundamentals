@@ -67,8 +67,8 @@ print(cursor.fetchall())
 4. Practice UPDATE:
 
 ```python
-# Update a book's year
-cursor.execute('UPDATE books SET year = 1950 WHERE title = "1984"')
+# Update a book's year - Using parameterized query for safety
+cursor.execute('UPDATE books SET year = ? WHERE title = ?', (1950, '1984'))
 conn.commit()
 ```
 

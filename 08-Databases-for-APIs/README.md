@@ -576,6 +576,8 @@ def get_users():
     conn = get_db_connection()
     
     # Build query with search
+    # Note: LIKE with leading wildcards ('%search%') can't use indexes efficiently.
+    # For large datasets, consider using full-text search (FTS) for better performance.
     if search:
         query = '''
             SELECT * FROM users 
