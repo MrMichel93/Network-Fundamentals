@@ -330,7 +330,11 @@ curl -i https://httpbin.org/status/301
 ```bash
 for code in 200 201 204 301 302 400 401 403 404 500 502 503; do
   echo "Testing $code:"
-  curl -o /dev/null -s -w "  Status: %{http_code}\n" https://httpbin.org/status/$code
+  if curl -o /dev/null -s -w "  Status: %{http_code}\n" https://httpbin.org/status/$code; then
+    echo "  ✓ Success"
+  else
+    echo "  ✗ Request failed (network issue)"
+  fi
 done
 ```
 
@@ -556,10 +560,13 @@ Open this HTML file in your browser:
 **Scenario 5: Rate Limiting**
 
 ```bash
-# Make many rapid requests
-for i in {1..70}; do
+# Make requests to demonstrate rate limiting (be responsible!)
+# NOTE: This will hit GitHub's rate limit after 60 requests for unauthenticated users
+# Adding a 1 second delay to be respectful to the API
+for i in {1..65}; do
   curl -s https://api.github.com/users/octocat > /dev/null
   echo "Request $i done"
+  sleep 1  # Be respectful to the API
 done
 ```
 

@@ -711,8 +711,8 @@ curl -v https://api.example.com/endpoint
 # Set a timeout (e.g., 10 seconds)
 curl --max-time 10 https://slow-api.example.com/endpoint
 
-# See timing breakdown
-curl -w "@-" -o /dev/null -s https://api.example.com/endpoint <<'EOF'
+# See timing breakdown using httpbin's delay endpoint
+curl -w "@-" -o /dev/null -s https://httpbin.org/delay/2 <<'EOF'
     time_namelookup:  %{time_namelookup}\n
        time_connect:  %{time_connect}\n
     time_appconnect:  %{time_appconnect}\n
@@ -722,6 +722,7 @@ curl -w "@-" -o /dev/null -s https://api.example.com/endpoint <<'EOF'
                     ----------\n
          time_total:  %{time_total}\n
 EOF
+# Note: Replace httpbin.org/delay/2 with your actual endpoint URL for real testing
 ```
 
 **Common Fixes**:
