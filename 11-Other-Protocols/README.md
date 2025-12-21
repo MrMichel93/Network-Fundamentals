@@ -71,6 +71,109 @@ By the end of this module, you will:
 | Error checking | Yes | Basic |
 | Use case | Web, email, files | Video, voice, gaming |
 
+### TCP vs UDP Protocol Diagram
+
+Here's a visual comparison of how TCP and UDP work:
+
+```
+TCP (Reliable, Connection-Oriented):
+
+Client                                    Server
+  |                                         |
+  |─── SYN (Connect?) ─────────────────────>|
+  |<─── SYN-ACK (Yes, ready!) ──────────────|
+  |─── ACK (Great, connected!) ─────────────>|
+  |                                         |
+  |═════════ Connection Established ════════|
+  |                                         |
+  |─── Data Packet #1 ─────────────────────>|
+  |<─── ACK (Got #1) ───────────────────────|
+  |                                         |
+  |─── Data Packet #2 ─────────────────────>|
+  |    (Lost in transit) ──X                |
+  |                                         |
+  |    (Timeout, no ACK)                    |
+  |─── Data Packet #2 (Resend) ────────────>|
+  |<─── ACK (Got #2) ───────────────────────|
+  |                                         |
+  |─── Data Packet #3 ─────────────────────>|
+  |<─── ACK (Got #3) ───────────────────────|
+  |                                         |
+  |─── FIN (Done, close) ───────────────────>|
+  |<─── ACK (OK, closing) ───────────────────|
+
+Result: All packets delivered in order ✅
+
+
+UDP (Fast, Connectionless):
+
+Client                                    Server
+  |                                         |
+  |─── Data Packet #1 ─────────────────────>|
+  |                                         | ✅ Received
+  |                                         |
+  |─── Data Packet #2 ─────────────────────>|
+  |    (Lost in transit) ──X                | ❌ Lost
+  |                                         |
+  |─── Data Packet #3 ─────────────────────>|
+  |                                         | ✅ Received
+  |                                         |
+  |─── Data Packet #4 ─────────────────────>|
+  |                                         | ✅ Received (arrived before #3)
+  |                                         |
+  |─── Data Packet #5 ─────────────────────>|
+  |                                         | ✅ Received
+
+Result: Fast delivery, some loss OK ⚡
+
+
+Protocol Layer Stack:
+
+┌─────────────────────────────────┐
+│   Application Layer             │  HTTP, FTP, SMTP, SSH, DNS
+├─────────────────────────────────┤
+│   Transport Layer               │  TCP, UDP
+├─────────────────────────────────┤
+│   Network Layer                 │  IP (Internet Protocol)
+├─────────────────────────────────┤
+│   Link Layer                    │  Ethernet, WiFi
+├─────────────────────────────────┤
+│   Physical Layer                │  Cables, Radio waves
+└─────────────────────────────────┘
+
+Data Flow Example:
+
+Application: "Send email"
+     ↓
+Transport (SMTP uses TCP): Split into packets, add port numbers
+     ↓
+Network (IP): Add source/destination IP addresses
+     ↓
+Link (Ethernet): Add MAC addresses
+     ↓
+Physical: Convert to electrical signals
+     ↓
+[The Internet]
+     ↓
+Process reverses at destination
+```
+
+**Key Takeaways:**
+
+**TCP:**
+- 3-way handshake (SYN, SYN-ACK, ACK)
+- Acknowledges every packet
+- Retransmits lost packets
+- Guarantees order and delivery
+- Higher overhead, slower but reliable
+
+**UDP:**
+- No connection setup
+- No acknowledgments
+- No retransmission
+- Packets can be lost or out of order
+- Lower overhead, faster but unreliable
+
 ### When to Use Which?
 
 **Choose TCP when:**

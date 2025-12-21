@@ -15,6 +15,184 @@ By the end of this module, you will:
 
 **Concept**: Multiple layers of security, so if one fails, others protect you.
 
+### Defense in Depth Architecture Diagram
+
+Here's a visual representation of layered security architecture:
+
+```
+Defense in Depth Security Layers:
+
+                            Internet (Threats)
+                                  │
+                                  ▼
+         ┌────────────────────────────────────────────┐
+         │     Layer 1: Network Security              │
+         │  ┌──────────────────────────────────────┐  │
+         │  │ Firewall (Block suspicious traffic)  │  │
+         │  │ DDoS Protection                      │  │
+         │  │ VPN (Encrypted tunnels)              │  │
+         │  │ Network Segmentation                 │  │
+         │  └──────────────────────────────────────┘  │
+         └────────────────────────────────────────────┘
+                                  │
+                                  ▼
+         ┌────────────────────────────────────────────┐
+         │     Layer 2: Application Security          │
+         │  ┌──────────────────────────────────────┐  │
+         │  │ HTTPS/TLS (Encrypted communication)  │  │
+         │  │ Rate Limiting                        │  │
+         │  │ Input Validation                     │  │
+         │  │ Authentication & Authorization       │  │
+         │  │ CORS Configuration                   │  │
+         │  │ Security Headers                     │  │
+         │  └──────────────────────────────────────┘  │
+         └────────────────────────────────────────────┘
+                                  │
+                                  ▼
+         ┌────────────────────────────────────────────┐
+         │     Layer 3: Code Security                 │
+         │  ┌──────────────────────────────────────┐  │
+         │  │ SQL Injection Prevention             │  │
+         │  │ XSS Protection                       │  │
+         │  │ CSRF Tokens                          │  │
+         │  │ Secure Dependencies                  │  │
+         │  │ Error Handling (No data leakage)     │  │
+         │  └──────────────────────────────────────┘  │
+         └────────────────────────────────────────────┘
+                                  │
+                                  ▼
+         ┌────────────────────────────────────────────┐
+         │     Layer 4: Data Security                 │
+         │  ┌──────────────────────────────────────┐  │
+         │  │ Database Encryption (At rest)        │  │
+         │  │ Password Hashing (bcrypt)            │  │
+         │  │ Access Control Lists                 │  │
+         │  │ Data Backup & Recovery               │  │
+         │  │ Audit Logging                        │  │
+         │  └──────────────────────────────────────┘  │
+         └────────────────────────────────────────────┘
+                                  │
+                                  ▼
+         ┌────────────────────────────────────────────┐
+         │     Layer 5: Monitoring & Response         │
+         │  ┌──────────────────────────────────────┐  │
+         │  │ Security Monitoring                  │  │
+         │  │ Intrusion Detection (IDS)            │  │
+         │  │ Log Analysis                         │  │
+         │  │ Incident Response Plan               │  │
+         │  │ Regular Security Audits              │  │
+         │  └──────────────────────────────────────┘  │
+         └────────────────────────────────────────────┘
+
+
+Attack Flow with Defense Layers:
+
+Attacker                    Security Layers                    Protected Resource
+   |                              |                                    |
+   |─── Malicious Request ──────> |                                    |
+   |    (SQL Injection)            |                                    |
+   |                         Layer 1: Firewall                         |
+   |                         ✅ Passes (looks normal)                  |
+   |                               |                                    |
+   |                         Layer 2: Rate Limit                       |
+   |                         ✅ Passes (not too many)                  |
+   |                               |                                    |
+   |                         Layer 3: Input Validation                 |
+   |                         ❌ BLOCKED!                               |
+   |                         Detected SQL pattern                      |
+   |<─── 400 Bad Request ───       |                                    |
+   |    "Invalid input"            |                                    |
+   |                               |                                    |
+   Attack stopped at Layer 3! ✅  |                                    |
+
+
+Multi-Layer Protection Example:
+
+Scenario: Attacker tries to access admin panel
+
+Request: GET /admin/users
+         No authentication token
+
+Layer 1 (Network): ✅ Allow (valid IP)
+Layer 2 (App): ❌ Block (no auth token) → 401 Unauthorized
+
+Request: GET /admin/users
+         With stolen/expired token
+
+Layer 1 (Network): ✅ Allow (valid IP)
+Layer 2 (App): ✅ Token present
+Layer 3 (Code): ❌ Block (token expired) → 401 Unauthorized
+
+Request: GET /admin/users
+         With valid user token (not admin)
+
+Layer 1 (Network): ✅ Allow (valid IP)
+Layer 2 (App): ✅ Valid token
+Layer 3 (Code): ✅ Authenticated
+Layer 4 (Data): ❌ Block (not admin) → 403 Forbidden
+
+
+Security Checklist Flow:
+
+Development Phase:
+┌─────────────────────────────────────────┐
+│ • Use secure coding practices          │
+│ • Implement input validation            │
+│ • Add authentication/authorization      │
+│ • Use parameterized queries             │
+│ • Add rate limiting                     │
+│ • Configure CORS properly               │
+│ • Hash passwords with bcrypt            │
+└─────────────────────────────────────────┘
+                  ↓
+Testing Phase:
+┌─────────────────────────────────────────┐
+│ • Test authentication flows             │
+│ • Try SQL injection attacks             │
+│ • Test XSS vulnerabilities              │
+│ • Check rate limiting                   │
+│ • Verify HTTPS configuration            │
+│ • Review security headers               │
+└─────────────────────────────────────────┘
+                  ↓
+Deployment Phase:
+┌─────────────────────────────────────────┐
+│ • Enable HTTPS/TLS                      │
+│ • Configure firewall rules              │
+│ • Set up monitoring/logging             │
+│ • Implement backup strategy             │
+│ • Enable DDoS protection                │
+└─────────────────────────────────────────┘
+                  ↓
+Maintenance Phase:
+┌─────────────────────────────────────────┐
+│ • Monitor security logs                 │
+│ • Update dependencies regularly         │
+│ • Review access logs                    │
+│ • Conduct security audits               │
+│ • Apply security patches                │
+│ • Test incident response plan           │
+└─────────────────────────────────────────┘
+```
+
+**Key Principles:**
+
+1. **No Single Point of Failure**: If one layer is breached, others protect
+2. **Layers Work Together**: Each adds different protection
+3. **Assume Breach**: Design assuming attackers will get past some layers
+4. **Monitor Everything**: Detect and respond to threats quickly
+
+**Real-World Example:**
+
+Imagine a bank vault:
+- **Layer 1**: Security guards at entrance (Network firewall)
+- **Layer 2**: ID check at door (Authentication)
+- **Layer 3**: PIN pad for vault (Authorization)
+- **Layer 4**: Time-locked safe (Data encryption)
+- **Layer 5**: Cameras and alarms (Monitoring)
+
+Same principle applies to network security!
+
 ### Security Layers
 
 ```
