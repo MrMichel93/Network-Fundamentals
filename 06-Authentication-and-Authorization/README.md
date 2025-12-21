@@ -52,6 +52,74 @@ These terms are often confused, but they're different!
 - Bouncer checks if you're 21+ (authorization)
 - You're allowed in or turned away
 
+### Visual Diagram
+
+Here's how authentication and authorization work together:
+
+```
+┌──────────┐
+│   User   │
+└─────┬────┘
+      │
+      │ 1. Login Request
+      │    (username + password)
+      ▼
+┌─────────────────────┐
+│   Authentication    │
+│     Server          │
+│  "Who are you?"     │
+└─────────┬───────────┘
+          │
+          │ 2. Verify Credentials
+          │    Create Token/Session
+          ▼
+    ┌───────────┐
+    │   Token   │ or  ┌──────────┐
+    │   (JWT)   │     │ Session  │
+    └─────┬─────┘     └────┬─────┘
+          │                │
+          └────────┬───────┘
+                   │
+                   │ 3. Token/Session returned to user
+                   ▼
+              ┌──────────┐
+              │   User   │
+              └─────┬────┘
+                    │
+                    │ 4. Request + Token/Session
+                    │    "I want to access /admin/users"
+                    ▼
+          ┌──────────────────────┐
+          │   Authorization      │
+          │      Server          │
+          │  "What can you do?"  │
+          └──────────┬───────────┘
+                     │
+         ┌───────────┴───────────┐
+         │                       │
+    ✅ Authorized          ❌ Forbidden
+    "User is admin"       "User is regular"
+         │                       │
+         ▼                       ▼
+   ┌──────────┐            ┌──────────┐
+   │ Resource │            │  Error   │
+   │ (Data)   │            │  403     │
+   └──────────┘            └──────────┘
+```
+
+**Complete Flow**:
+```
+User → Login (Authentication) → Token/Session
+                                      ↓
+Request + Token → Server checks (Authorization) → Resource
+```
+
+**Key Points**:
+- **Authentication happens FIRST**: Prove your identity
+- **Authorization happens SECOND**: Check permissions
+- **Token/Session is the proof**: Carries identity info
+- **Every request needs both**: Identify user, then check access
+
 ## Session-Based Authentication 🎫
 
 The traditional way to authenticate web users.
@@ -327,6 +395,129 @@ curl http://localhost:5000/profile \
 - ❌ Replay attack risk if not over HTTPS
 - ❌ Need to handle token refresh
 
+### Refresh Tokens
+
+**The Problem**: Access tokens should be short-lived for security, but requiring users to login frequently is bad UX.
+
+**The Solution**: Use refresh tokens!
+
+```
+┌─────────────┐         ┌──────────┐
+│   Client    │         │  Server  │
+└──────┬──────┘         └────┬─────┘
+       │                     │
+       │ Login               │
+       ├────────────────────>│
+       │                     │
+       │ Access + Refresh    │
+       │<────────────────────┤
+       │  Token              │
+       │                     │
+       │ Request + Access    │
+       ├────────────────────>│
+       │                     │
+       │ Response            │
+       │<────────────────────┤
+       │                     │
+       │ (Access expires)    │
+       │                     │
+       │ Refresh Request     │
+       ├────────────────────>│
+       │                     │
+       │ New Access Token    │
+       │<────────────────────┤
+```
+
+**How it works**:
+1. Login returns both access token (short-lived) and refresh token (long-lived)
+2. Use access token for requests
+3. When access token expires, use refresh token to get new access token
+4. Refresh tokens can be revoked if compromised
+
+**Implementation**:
+```python
+# Two token types with different expiration
+ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)   # Short-lived
+REFRESH_TOKEN_EXPIRES = timedelta(days=7)      # Long-lived
+
+@app.route('/login', methods=['POST'])
+def login():
+    # Verify credentials...
+    
+    # Create both tokens
+    access_token = create_access_token(username)
+    refresh_token = create_refresh_token(username)
+    
+    return jsonify({
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    })
+
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    refresh_token = request.json.get('refresh_token')
+    
+    # Verify refresh token
+    payload = jwt.decode(refresh_token, REFRESH_SECRET_KEY, algorithms=['HS256'])
+    
+    # Check if revoked (check database/Redis)
+    if is_revoked(refresh_token):
+        return jsonify({'error': 'Token revoked'}), 401
+    
+    # Create new access token
+    new_access_token = create_access_token(payload['username'])
+    
+    return jsonify({'access_token': new_access_token})
+```
+
+### Storing JWTs: localStorage vs httpOnly Cookies
+
+**localStorage** (Common but risky):
+```javascript
+// Store token
+localStorage.setItem('token', accessToken);
+
+// Use token
+const token = localStorage.getItem('token');
+fetch('/api/data', {
+    headers: { 'Authorization': `Bearer ${token}` }
+});
+```
+
+**Risks**:
+- ❌ Vulnerable to XSS attacks
+- ❌ JavaScript can access and steal token
+- ❌ Any third-party script can read it
+
+**httpOnly Cookies** (More secure):
+```python
+# Server sets httpOnly cookie
+response.set_cookie(
+    'token',
+    access_token,
+    httponly=True,   # Cannot be accessed by JavaScript
+    secure=True,     # Only sent over HTTPS
+    samesite='Strict'  # CSRF protection
+)
+```
+
+**Benefits**:
+- ✅ Not accessible via JavaScript
+- ✅ Automatically included in requests
+- ✅ Protected from XSS attacks
+
+**Comparison Table**:
+
+| Feature | localStorage | httpOnly Cookie |
+|---------|-------------|-----------------|
+| XSS Protection | ❌ Vulnerable | ✅ Protected |
+| CSRF Protection | ✅ Not vulnerable | ⚠️ Needs CSRF tokens |
+| Mobile Apps | ✅ Easy to use | ❌ Complicated |
+| Cross-domain | ✅ Easy | ⚠️ Needs CORS setup |
+| Best for | Mobile/SPAs | Traditional web apps |
+
+**Recommendation**: Use httpOnly cookies for web apps, localStorage only if necessary (with strong XSS protection).
+
 ## API Keys 🔑
 
 Simplest form of authentication for APIs.
@@ -397,6 +588,140 @@ print(response.json())
 import os
 
 API_KEY = os.environ.get('WEATHER_API_KEY')
+```
+
+### Rate Limiting with API Keys
+
+Rate limiting prevents abuse and ensures fair usage of your API.
+
+**Why Rate Limit?**
+- Prevent brute force attacks
+- Protect against DDoS
+- Ensure fair resource allocation
+- Enforce pricing tiers
+
+**Common Rate Limit Strategies**:
+
+1. **Fixed Window**: X requests per time window
+   ```
+   10 requests per minute
+   100 requests per hour
+   ```
+
+2. **Sliding Window**: More accurate, tracks exact time
+   ```
+   Track timestamp of each request
+   Count requests in last 60 seconds
+   ```
+
+3. **Token Bucket**: Requests "cost" tokens that refill over time
+
+**Implementation Example**:
+```python
+from flask import Flask, request, jsonify
+from collections import defaultdict
+import time
+
+app = Flask(__name__)
+
+# Store: {api_key: [timestamp1, timestamp2, ...]}
+rate_limit_store = defaultdict(list)
+
+RATE_LIMIT = 10  # requests
+TIME_WINDOW = 60  # seconds
+
+def check_rate_limit(api_key):
+    current_time = time.time()
+    
+    # Get request timestamps for this key
+    requests = rate_limit_store[api_key]
+    
+    # Remove timestamps older than time window
+    requests[:] = [ts for ts in requests if current_time - ts < TIME_WINDOW]
+    
+    # Check if limit exceeded
+    if len(requests) >= RATE_LIMIT:
+        oldest = min(requests)
+        retry_after = int(oldest + TIME_WINDOW - current_time)
+        return False, retry_after
+    
+    # Record this request
+    requests.append(current_time)
+    return True, 0
+
+@app.route('/api/data')
+def get_data():
+    api_key = request.headers.get('X-API-Key')
+    
+    if not api_key:
+        return jsonify({'error': 'Missing API key'}), 401
+    
+    # Check rate limit
+    allowed, retry_after = check_rate_limit(api_key)
+    
+    if not allowed:
+        return jsonify({
+            'error': 'Rate limit exceeded',
+            'retry_after': retry_after
+        }), 429
+    
+    # Serve the request
+    return jsonify({'data': 'Your data here'})
+```
+
+**Using Flask-Limiter** (Production-ready):
+```python
+from flask import Flask
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+app = Flask(__name__)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+@app.route("/login", methods=["POST"])
+@limiter.limit("5 per minute")  # Strict limit for login
+def login():
+    # Login logic
+    pass
+
+@app.route("/api/data")
+@limiter.limit("100 per hour")
+def api_data():
+    # Data endpoint
+    pass
+```
+
+**Rate Limit Headers** (Best Practice):
+```python
+# Include rate limit info in response headers
+response.headers['X-RateLimit-Limit'] = '100'
+response.headers['X-RateLimit-Remaining'] = '87'
+response.headers['X-RateLimit-Reset'] = '1735689600'  # Unix timestamp
+
+# For rate limit errors
+response.headers['Retry-After'] = '45'  # Seconds until retry
+```
+
+**Client Handling**:
+```python
+import requests
+import time
+
+def api_call_with_retry(url, headers):
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 429:
+        # Rate limited
+        retry_after = int(response.headers.get('Retry-After', 60))
+        print(f"Rate limited. Waiting {retry_after} seconds...")
+        time.sleep(retry_after)
+        return api_call_with_retry(url, headers)
+    
+    return response
 ```
 
 ## OAuth 2.0 Basics 🔓
@@ -568,6 +893,137 @@ def login():
     # Login logic
 ```
 
+### 7. Protect Against Common Vulnerabilities
+
+**SQL Injection**:
+```python
+# BAD - Vulnerable to SQL injection
+query = f"SELECT * FROM users WHERE username='{username}'"
+
+# GOOD - Use parameterized queries
+cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+```
+
+**Cross-Site Scripting (XSS)**:
+```python
+# Sanitize user input
+from markupsafe import escape
+
+safe_username = escape(username)
+
+# Use httpOnly cookies for tokens
+response.set_cookie('token', value, httponly=True)
+```
+
+**Cross-Site Request Forgery (CSRF)**:
+```python
+from flask_wtf.csrf import CSRFProtect
+
+csrf = CSRFProtect(app)
+
+# Or use SameSite cookie attribute
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = True
+```
+
+## Common Authentication Vulnerabilities ⚠️
+
+### 1. **Broken Authentication**
+- Weak passwords allowed
+- No account lockout
+- Session tokens predictable
+- Session fixation attacks
+
+**Prevention**:
+- Enforce strong password policies
+- Implement account lockout after failed attempts
+- Use cryptographically secure random tokens
+- Regenerate session ID after login
+
+### 2. **Credential Stuffing**
+Attackers use leaked credentials from other breaches.
+
+**Prevention**:
+- Monitor for unusual login patterns
+- Implement CAPTCHA after failed attempts
+- Use device fingerprinting
+- Notify users of new device logins
+
+### 3. **Session Hijacking**
+Attacker steals session token and impersonates user.
+
+**Prevention**:
+- Use HTTPS only
+- Set httpOnly and Secure flags on cookies
+- Implement session timeouts
+- Bind sessions to IP address (optional)
+
+### 4. **JWT Vulnerabilities**
+
+**Algorithm Confusion**:
+```python
+# Attacker changes algorithm to 'none'
+# Always specify algorithms explicitly
+jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+```
+
+**Weak Secret Key**:
+```python
+# BAD
+SECRET_KEY = 'secret'
+
+# GOOD
+import secrets
+SECRET_KEY = secrets.token_hex(32)
+```
+
+### 5. **OAuth Attacks**
+
+**Open Redirect**:
+```python
+# Validate redirect_uri
+allowed_redirects = ['https://yourapp.com/callback']
+if redirect_uri not in allowed_redirects:
+    return error('Invalid redirect URI')
+```
+
+**CSRF in OAuth Flow**:
+```python
+# Use state parameter for CSRF protection
+state = secrets.token_urlsafe(16)
+session['oauth_state'] = state
+
+# Verify state in callback
+if request.args.get('state') != session.get('oauth_state'):
+    return error('Invalid state')
+```
+
+## Hands-On Practice 💻
+
+Ready to implement authentication yourself? Check out:
+
+1. **Working Examples**: See `examples/` directory for complete code
+   - Session-based auth (Flask)
+   - JWT auth with refresh tokens
+   - API key authentication
+   - OAuth 2.0 integration
+   - Intentionally vulnerable app (for security testing)
+
+2. **Exercises**: Complete hands-on tasks in `exercises.md`
+   - Build and test each authentication method
+   - Exploit vulnerabilities in the vulnerable app
+   - Create your own TODO API with auth
+
+3. **Testing Tools**: Use Postman collections in `postman/`
+   - Pre-configured API tests
+   - Automated test scripts
+   - Environment setup
+
+4. **Security Testing**: Follow the guide in `security_testing.md`
+   - Find common vulnerabilities
+   - Learn exploitation techniques
+   - Practice remediation
+
 ## Summary and Key Takeaways
 
 ✅ **Authentication** = Who you are (identity)  
@@ -591,3 +1047,106 @@ Now that you understand authentication, you're ready to learn about **REST API D
 ## Practice
 
 Complete the exercises in [exercises.md](./exercises.md) to implement authentication!
+
+## 📚 Additional Resources in This Module
+
+This module includes comprehensive resources to help you master authentication:
+
+### 📁 Code Examples (`examples/`)
+Working implementations of all authentication methods:
+- `01_session_auth.py` - Session-based authentication with bcrypt
+- `02_jwt_auth.py` - JWT with refresh tokens
+- `03_api_key_auth.py` - API key authentication with rate limiting
+- `04_oauth_example.py` - GitHub OAuth 2.0 integration
+- `05_vulnerable_auth.py` - Intentionally vulnerable app for security testing
+- `README.md` - Guide to using all examples
+- `requirements.txt` - Python dependencies
+
+### 🏋️ Hands-On Exercises (`exercises.md`)
+Seven comprehensive exercises:
+1. Session-based authentication
+2. JWT authentication with refresh tokens
+3. API key authentication and rate limiting
+4. OAuth 2.0 integration
+5. Security testing and exploitation
+6. Postman collection testing
+7. Build your own authentication system
+
+### 📮 Postman Collections (`postman/`)
+Ready-to-use API testing collections:
+- `Session-Auth-Collection.json` - Test session authentication
+- `JWT-Auth-Collection.json` - Test JWT authentication
+- `README.md` - Guide to using Postman collections
+
+### 🔒 Security Resources
+- `security_testing.md` - Comprehensive security testing guide
+  - Common vulnerabilities and how to find them
+  - Testing methodology
+  - Exploitation techniques
+  - Remediation strategies
+  - Security testing report template
+
+### 🛠️ Troubleshooting
+- `common_errors.md` - Solutions to common authentication issues
+  - Session authentication errors
+  - JWT errors and fixes
+  - API key issues
+  - OAuth problems
+  - Debugging tips
+
+### 🎯 Quick Start
+
+1. **Install dependencies**:
+   ```bash
+   cd examples
+   pip install -r requirements.txt
+   ```
+
+2. **Run an example**:
+   ```bash
+   python 01_session_auth.py
+   ```
+
+3. **Test with curl**:
+   ```bash
+   curl -X POST http://localhost:5000/register \
+     -H "Content-Type: application/json" \
+     -d '{"username":"test","password":"test123","email":"test@example.com"}'
+   ```
+
+4. **Or import Postman collection**:
+   - Open Postman
+   - Import `postman/Session-Auth-Collection.json`
+   - Run the collection
+
+### 📖 Learning Path
+
+**Beginners**: Start here
+1. Read the main README sections
+2. Run `examples/01_session_auth.py`
+3. Complete Exercise 1 in `exercises.md`
+4. Try the Postman collection
+
+**Intermediate**: Build your skills
+1. Implement JWT authentication (Exercise 2)
+2. Add API key authentication (Exercise 3)
+3. Integrate OAuth (Exercise 4)
+4. Test with Postman collections
+
+**Advanced**: Security focus
+1. Read `security_testing.md`
+2. Exploit vulnerabilities in `examples/05_vulnerable_auth.py`
+3. Write security test reports
+4. Build your own secure authentication (Exercise 7)
+
+### 🔗 External Resources
+
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [JWT.io](https://jwt.io) - JWT debugger and documentation
+- [OAuth 2.0 Simplified](https://www.oauth.com/)
+- [Flask-Login Documentation](https://flask-login.readthedocs.io/)
+- [bcrypt Documentation](https://github.com/pyca/bcrypt/)
+
+---
+
+Happy coding! If you complete all exercises, you'll have production-ready authentication knowledge! 🚀
