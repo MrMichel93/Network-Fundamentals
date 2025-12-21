@@ -9,6 +9,15 @@ This course will take you from basic networking concepts to building real-time w
 **Estimated Time:** 4-6 weeks (2-3 hours per week)  
 **Target Audience:** High school students or self-learners with basic programming knowledge
 
+## 🎯 What You'll Build
+
+By the end of this course, you'll build:
+1. A weather API client (with proper error handling)
+2. A RESTful task manager with authentication
+3. A real-time chat application
+4. A URL shortener with analytics
+5. A secure API gateway (capstone project)
+
 ## 📚 What You'll Learn
 
 ### Core Concepts
@@ -117,16 +126,101 @@ Apply your knowledge with three progressive hands-on projects:
 ### [Resources](./Resources/)
 Additional materials including glossary, tools guide, and further reading.
 
-## 🛠️ Prerequisites
+## ✅ Are You Ready?
 
-Before starting this course, you should have:
+You should be comfortable with:
+- [ ] Variables and functions in Python or JavaScript
+- [ ] Reading and writing JSON
+- [ ] Basic command line usage (cd, ls, running programs)
+- [ ] Installing software on your computer
 
-- Basic programming knowledge in Python or JavaScript
-- Familiarity with the command line/terminal
-- A text editor or IDE installed
-- Python 3.7+ installed on your computer
+You do NOT need:
+- [ ] ❌ Advanced programming skills
+- [ ] ❌ Previous networking knowledge
+- [ ] ❌ Linux expertise
+- [ ] ❌ Database experience (we'll teach you)
 
-Don't worry if you're not an expert - we'll guide you through everything!
+**Not quite there yet?** Check our [Getting Ready Guide](00-Prerequisites/getting-ready.md)
+
+## 📅 Visual Learning Path
+
+```
+Week 1-2: Foundations
+Internet Basics → Web Mechanics → Developer Tools
+
+Week 3-4: HTTP & APIs
+HTTP Protocol → API Consumption → API Design
+
+Week 5-6: Data & Security
+Databases → Authentication → API Security
+
+Week 7-8: Real-Time & Production
+WebSockets → Protocols → HTTPS → Best Practices
+```
+
+## 🤔 Why This Order?
+
+Our course structure follows a carefully designed pedagogical approach:
+
+- **Master HTTP before REST** - You need to understand the foundation protocol before diving into architectural patterns built on top of it
+- **Learn to consume APIs before building them** - Understanding how to use APIs effectively makes you a better API designer
+- **Practice with tools before complex concepts** - Hands-on experience with DevTools and Postman builds confidence before tackling authentication and security
+- **Security threaded throughout, not bolted on at end** - Security best practices are integrated into each module, not treated as an afterthought
+
+This progression ensures you build a solid foundation while maintaining engagement through practical, hands-on learning.
+
+## 🛠️ Tools We'll Use
+
+### Must Have (Free)
+- **Postman** - API testing (or Thunder Client)
+- **curl** - Command-line HTTP client
+- **Browser DevTools** - Built into Chrome/Firefox
+- **Python 3.7+** - For building APIs
+- **VS Code** - Code editor
+
+### Nice to Have
+- **HTTPie** - User-friendly curl alternative
+- **Insomnia** - Alternative to Postman
+- **DB Browser for SQLite** - Database viewer
+
+### We Provide
+- Sample APIs to practice with
+- Debugging exercises
+- Video walkthroughs (coming soon)
+
+## 🔍 How to Use Debugging Tools
+
+### Quick Reference Table
+
+| Tool | Best For | When to Use |
+|------|----------|-------------|
+| **Browser DevTools** | Inspecting web requests, viewing headers, debugging JavaScript | Building web apps, diagnosing CORS issues, checking cookies |
+| **Postman** | Testing APIs, saving requests, organizing collections | API development, complex requests with auth, team collaboration |
+| **curl** | Quick CLI requests, scripting, automation | Testing from terminal, CI/CD pipelines, shell scripts |
+| **HTTPie** | Human-friendly CLI requests, JSON formatting | Quick API exploration, prettier output than curl |
+
+### Common Workflows
+
+**Debugging a Failed API Request:**
+1. Check Network tab in Browser DevTools (if web app)
+2. Verify request method, URL, and headers
+3. Copy as curl and test in terminal
+4. Import into Postman for detailed inspection
+5. Check response status code and body
+
+**Testing Authentication:**
+1. Use Postman to test login endpoint
+2. Save auth token from response
+3. Add token to collection variables
+4. Test protected endpoints with saved token
+5. Use Browser DevTools to verify cookies/headers
+
+**Investigating Performance Issues:**
+1. Open Network tab before loading page
+2. Look for slow requests (waterfall view)
+3. Check request/response sizes
+4. Identify bottlenecks (large files, slow APIs)
+5. Use curl with `-w` flag for timing details
 
 ## 💻 Setup Instructions
 
