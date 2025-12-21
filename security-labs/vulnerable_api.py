@@ -104,6 +104,7 @@ def login():
     
     try:
         cursor = conn.cursor()
+        cursor.execute(query)
         result = cursor.fetchone()
         conn.close()
         
