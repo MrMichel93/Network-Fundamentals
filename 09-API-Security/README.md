@@ -39,6 +39,79 @@ Allowing unlimited requests (DDoS attacks)
 ### 8. CORS Misconfiguration
 Allowing untrusted origins to access your API
 
+### API Security Flow Diagram
+
+Here's a visual representation of how security layers protect your API:
+
+```
+API Security Defense Layers:
+
+Client Request                    Security Layers                   API Endpoint
+     |                                  |                                |
+     |─── POST /api/user ──────────────>|                                |
+     |    {"email": "user@ex.com"}      |                                |
+     |                                  |                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │   HTTPS   │                          |
+     |                            │ Encryption│                          |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │Rate Limit │                          |
+     |                            │   Check   │                          |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │   CORS    │                          |
+     |                            │   Check   │                          |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │   Auth    │                          |
+     |                            │ Validation│                          |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │   Input   │                          |
+     |                            │Validation │                          |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                            ┌─────▼─────┐                          |
+     |                            │   SQL     │                          |
+     |                            │Sanitization│                         |
+     |                            └─────┬─────┘                          |
+     |                                  │                                |
+     |                                  ▼                                |
+     |                            All checks passed ───────────────────> |
+     |                                                                    |
+     |<────────────────────────── Process & respond ──────────────────── |
+     |    200 OK {"id": 123}                                             |
+
+Attack Prevention Examples:
+
+1. Rate Limit Block:
+   Client ──> Too many requests ──> [Rate Limit] ──X──> 429 Too Many Requests
+
+2. CORS Rejection:
+   Client ──> Wrong origin ──> [CORS Check] ──X──> 403 Forbidden
+
+3. Invalid Auth:
+   Client ──> No/bad token ──> [Auth Check] ──X──> 401 Unauthorized
+
+4. SQL Injection Attempt:
+   Client ──> Malicious input ──> [Sanitization] ──X──> 400 Bad Request
+```
+
+**Defense in Depth:**
+- **Layer 1 - HTTPS**: Encrypt all communication
+- **Layer 2 - Rate Limiting**: Prevent brute force and DDoS
+- **Layer 3 - CORS**: Control which domains can access API
+- **Layer 4 - Authentication**: Verify user identity
+- **Layer 5 - Input Validation**: Check data types and formats
+- **Layer 6 - SQL Sanitization**: Prevent injection attacks
+
+**Key Principle**: If one layer fails, others still protect your API
+
 ## Input Validation 📝
 
 **Rule**: Never trust user input!
