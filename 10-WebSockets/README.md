@@ -448,7 +448,7 @@ Learn about other network protocols: [Other Protocols](../05-Other-Protocols/)
 
 ---
 
-[← Back: REST APIs](../03-REST-APIs/) | [Next: Other Protocols →](../05-Other-Protocols/)
+[← Back: API Security](../09-API-Security/) | [Next: Other Protocols →](../11-Other-Protocols/)
 
 ## Practice
 

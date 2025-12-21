@@ -411,7 +411,7 @@ Now that you understand HTTP, you're ready to learn about **REST APIs** - a stru
 
 ---
 
-[← Back: How The Internet Works](../01-How-The-Internet-Works/) | [Next: REST APIs →](../03-REST-APIs/)
+[← Back: Developer Tools Setup](../03-Developer-Tools-Setup/) | [Next: Working With APIs →](../05-Working-With-APIs/)
 
 ## Practice
 

@@ -375,4 +375,4 @@ Complete solutions can be found in [solutions/02-http-solutions.md](../solutions
 
 ---
 
-[← Back to Lesson](./README.md) | [Next: REST APIs →](../03-REST-APIs/)
+[← Back to Lesson](./README.md) | [Next: Working With APIs →](../05-Working-With-APIs/)

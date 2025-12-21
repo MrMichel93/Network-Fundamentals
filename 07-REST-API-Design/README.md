@@ -407,7 +407,7 @@ Ready to add real-time features to your apps? Learn about [WebSockets](../04-Web
 
 ---
 
-[← Back: HTTP Fundamentals](../02-HTTP-Fundamentals/) | [Next: WebSockets →](../04-WebSockets/)
+[← Back: Authentication and Authorization](../06-Authentication-and-Authorization/) | [Next: Databases for APIs →](../08-Databases-for-APIs/)
 
 ## Practice
 

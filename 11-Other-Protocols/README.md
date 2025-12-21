@@ -388,7 +388,7 @@ Learn how to secure your network communications: [Security Basics](../06-Securit
 
 ---
 
-[← Back: WebSockets](../04-WebSockets/) | [Next: Security Basics →](../06-Security-Basics/)
+[← Back: WebSockets](../10-WebSockets/) | [Next: HTTPS and TLS →](../12-HTTPS-and-TLS/)
 
 ## Practice
 
