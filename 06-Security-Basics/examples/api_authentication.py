@@ -246,4 +246,6 @@ if __name__ == '__main__':
       http://localhost:5000/basic/data
     """)
     
-    app.run(debug=True, port=5000)
+    # Note: debug=True is useful for development but should NEVER be used in production
+    # In production, use: app.run(host='0.0.0.0', port=5000)
+    app.run(debug=False, port=5000)  # Set to False for security

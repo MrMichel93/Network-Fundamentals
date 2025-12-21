@@ -11,36 +11,102 @@ This course will take you from basic networking concepts to building real-time w
 
 ## 📚 What You'll Learn
 
-- How the internet works (IP addresses, DNS, routing, packets)
+### Core Concepts
+- How the internet and the web work (IP addresses, DNS, routing, packets)
 - HTTP protocol and web communication fundamentals
+- URLs, domains, and how browsers work
+- Network layers and the OSI model (simplified)
+
+### Developer Tools & Skills
+- Browser DevTools (especially Network tab)
+- Postman, curl, and HTTPie for API testing
+- Reading and working with API documentation
+- Debugging network issues
+
+### API Development
 - Building and consuming RESTful APIs
+- Database integration (SQL and NoSQL)
+- CRUD operations with persistence
+- API design best practices
+
+### Security
+- Authentication vs Authorization
+- Session-based and token-based auth (JWT)
+- OAuth 2.0 and API keys
+- Input validation and sanitization
+- SQL injection and XSS prevention
+- HTTPS, TLS/SSL, and certificates
+- Rate limiting and CORS
+- Comprehensive security best practices
+
+### Advanced Topics
 - Real-time communication with WebSockets
 - Understanding different network protocols (TCP, UDP, FTP, SMTP, SSH)
-- Network security basics (HTTPS, TLS/SSL, authentication)
-- Practical tools for debugging and testing networked applications
+- Network security standards (OWASP Top 10)
+- Defense in depth strategies
 
 ## 🗂️ Course Structure
+
+> **📦 Note**: The course has been restructured! See [MIGRATION.md](./MIGRATION.md) for details.
 
 ### [00. Prerequisites](./00-Prerequisites/)
 Get ready for the course! Learn what you need to know before starting.
 
-### [01. How The Internet Works](./01-How-The-Internet-Works/)
-Understand the fundamentals of internet communication, IP addresses, DNS, and routing.
+### [01. Internet Basics](./01-Internet-Basics/) ✨ NEW
+Understand how data travels, IP addresses, DNS, network layers, and the fundamentals of internet communication.
 
-### [02. HTTP Fundamentals](./02-HTTP-Fundamentals/)
-Learn about the HTTP protocol, request/response cycle, methods, status codes, and headers.
+### [02. How The Web Works](./02-How-The-Web-Works/) ✨ NEW
+Learn about clients and servers, URLs and domains, and how browsers work behind the scenes.
 
-### [03. REST APIs](./03-REST-APIs/)
-Master RESTful API design, CRUD operations, and best practices.
+### [03. Developer Tools Setup](./03-Developer-Tools-Setup/) ✨ NEW
+Master browser DevTools, Postman, curl, and HTTPie for testing and debugging networked applications.
 
-### [04. WebSockets](./04-WebSockets/)
-Explore real-time communication and build interactive applications.
+### [04. HTTP Fundamentals](./04-HTTP-Fundamentals/)
+Deep dive into the HTTP protocol, request/response cycle, methods, status codes, and headers.
 
-### [05. Other Protocols](./05-Other-Protocols/)
-Learn about TCP, UDP, FTP, SMTP, and SSH protocols.
+### [05. Working With APIs](./05-Working-With-APIs/) ✨ NEW
+Make requests with different tools, read API documentation, handle responses, and work with real APIs.
 
-### [06. Security Basics](./06-Security-Basics/)
-Understand network security, HTTPS, authentication, and common vulnerabilities.
+### [06. Authentication and Authorization](./06-Authentication-and-Authorization/) ✨ NEW ⭐ CRITICAL
+Learn about session-based auth, JWT tokens, OAuth 2.0, API keys, and security best practices.
+
+### [07. REST API Design](./07-REST-API-Design/)
+Master RESTful principles, resource design, CRUD operations, and API best practices.
+
+### [08. Databases for APIs](./08-Databases-for-APIs/) ✨ NEW ⭐ CRITICAL
+Connect APIs to databases (SQL and NoSQL), implement data persistence, and design database schemas.
+
+### [09. API Security](./09-API-Security/) ✨ NEW
+Input validation, rate limiting, CORS, SQL injection prevention, and XSS protection.
+
+### [10. WebSockets](./10-WebSockets/)
+Explore real-time communication, understand when to use WebSockets, and build interactive applications.
+
+### [11. Other Protocols](./11-Other-Protocols/)
+Learn about TCP, UDP, FTP, SMTP, SSH protocols and when to use each.
+
+### [12. HTTPS and TLS](./12-HTTPS-and-TLS/) ✨ EXPANDED
+Understand encryption, certificates, man-in-the-middle attacks, and how to set up HTTPS.
+
+### [13. Network Security Best Practices](./13-Network-Security-Best-Practices/) ✨ EXPANDED
+Comprehensive security review, defense in depth, security testing, and OWASP Top 10.
+
+### Supporting Resources
+
+#### [Debugging Exercises](./debugging-exercises/) ✨ NEW
+Tool-specific practice exercises for debugging common networking issues.
+
+#### [API Examples](./api-examples/) ✨ NEW
+Sample API implementations you can run locally for hands-on practice.
+
+#### [Security Labs](./security-labs/) ✨ NEW
+Practical security exercises and penetration testing scenarios in a safe environment.
+
+#### [Architecture Diagrams](./architecture-diagrams/) ✨ NEW
+Visual representations of networking concepts and system architectures.
+
+#### [Interview Prep](./interview-prep/) ✨ NEW
+Networking interview questions, answers, and preparation materials.
 
 ### [Projects](./Projects/)
 Apply your knowledge with three progressive hands-on projects:
@@ -101,17 +167,49 @@ For detailed setup instructions for different operating systems, see [setup.md](
 
 ## 🎓 Learning Path
 
+> **New for 2024**: The course has been expanded from 7 to 14 modules with critical additions in authentication, databases, and security!
+
 ```
-Prerequisites → Internet Basics → HTTP → REST APIs → WebSockets → Other Protocols → Security → Projects
+Prerequisites → Internet Basics → Web Fundamentals → Developer Tools → 
+HTTP → APIs → Authentication → REST Design → Databases → 
+Security → WebSockets → Other Protocols → HTTPS → Best Practices → Projects
 ```
 
-**Recommended pace:**
-- Week 1: Prerequisites + How The Internet Works
-- Week 2: HTTP Fundamentals
-- Week 3: REST APIs
-- Week 4: WebSockets + Other Protocols
-- Week 5: Security Basics
-- Week 6: Final Projects
+### Recommended Pace (8 weeks):
+
+**Week 1: Foundation**
+- 00: Prerequisites
+- 01: Internet Basics  
+- 02: How The Web Works
+
+**Week 2: HTTP & Tools**
+- 03: Developer Tools Setup
+- 04: HTTP Fundamentals
+
+**Week 3: Working with APIs**
+- 05: Working With APIs
+- 06: Authentication and Authorization ⭐
+
+**Week 4: Building APIs**
+- 07: REST API Design
+- 08: Databases for APIs ⭐
+
+**Week 5: Security**
+- 09: API Security
+- 12: HTTPS and TLS
+
+**Week 6: Advanced Topics**
+- 10: WebSockets
+- 11: Other Protocols
+
+**Week 7: Security Deep Dive**
+- 13: Network Security Best Practices
+- Review security modules
+
+**Week 8: Projects**
+- Complete the three progressive projects
+- Build your own application
+- Review and reinforce concepts
 
 ## 🧪 Assessment
 
