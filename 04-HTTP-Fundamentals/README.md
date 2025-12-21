@@ -513,6 +513,8 @@ Check the `examples/` folder for:
 
 When things go wrong with HTTP requests, you need to know how to debug them. Here are common scenarios and how to solve them using different tools.
 
+> **📝 Note**: Examples in this section use placeholder URLs like `api.example.com` to show the pattern. When you see these, replace them with your actual API endpoints. For hands-on practice with working URLs, see the [exercises](./exercises.md) which use real endpoints like httpbin.org and api.github.com.
+
 ### Scenario 1: Request Not Working (404 Error)
 
 **Symptoms**: 
@@ -711,7 +713,9 @@ curl -v https://api.example.com/endpoint
 # Set a timeout (e.g., 10 seconds)
 curl --max-time 10 https://slow-api.example.com/endpoint
 
-# See timing breakdown using httpbin's delay endpoint
+# See timing breakdown for any URL
+# Usage: curl -w "@-" -o /dev/null -s YOUR_URL <<'EOF' ... EOF
+# Example with httpbin's delay endpoint (simulates a slow server):
 curl -w "@-" -o /dev/null -s https://httpbin.org/delay/2 <<'EOF'
     time_namelookup:  %{time_namelookup}\n
        time_connect:  %{time_connect}\n
@@ -722,7 +726,7 @@ curl -w "@-" -o /dev/null -s https://httpbin.org/delay/2 <<'EOF'
                     ----------\n
          time_total:  %{time_total}\n
 EOF
-# Note: Replace httpbin.org/delay/2 with your actual endpoint URL for real testing
+# Replace the URL with your endpoint to debug timing issues
 ```
 
 **Common Fixes**:

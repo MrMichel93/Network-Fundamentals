@@ -335,6 +335,7 @@ for code in 200 201 204 301 302 400 401 403 404 500 502 503; do
   else
     echo "  ✗ Request failed (network issue)"
   fi
+  sleep 0.2  # Small delay to be respectful to the server
 done
 ```
 
@@ -561,13 +562,17 @@ Open this HTML file in your browser:
 
 ```bash
 # Make requests to demonstrate rate limiting (be responsible!)
-# NOTE: This will hit GitHub's rate limit after 60 requests for unauthenticated users
-# Adding a 1 second delay to be respectful to the API
-for i in {1..65}; do
+# NOTE: Using a smaller number to avoid exhausting your quota
+# GitHub allows 60 requests/hour for unauthenticated users
+for i in {1..35}; do
   curl -s https://api.github.com/users/octocat > /dev/null
   echo "Request $i done"
   sleep 1  # Be respectful to the API
 done
+
+# Check rate limit status
+echo -e "\nChecking rate limit status:"
+curl -s https://api.github.com/users/octocat | head -1
 ```
 
 **Your Tasks**:
