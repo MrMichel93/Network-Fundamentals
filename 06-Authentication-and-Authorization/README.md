@@ -52,6 +52,74 @@ These terms are often confused, but they're different!
 - Bouncer checks if you're 21+ (authorization)
 - You're allowed in or turned away
 
+### Visual Diagram
+
+Here's how authentication and authorization work together:
+
+```
+┌──────────┐
+│   User   │
+└─────┬────┘
+      │
+      │ 1. Login Request
+      │    (username + password)
+      ▼
+┌─────────────────────┐
+│   Authentication    │
+│     Server          │
+│  "Who are you?"     │
+└─────────┬───────────┘
+          │
+          │ 2. Verify Credentials
+          │    Create Token/Session
+          ▼
+    ┌───────────┐
+    │   Token   │ or  ┌──────────┐
+    │   (JWT)   │     │ Session  │
+    └─────┬─────┘     └────┬─────┘
+          │                │
+          └────────┬───────┘
+                   │
+                   │ 3. Token/Session returned to user
+                   ▼
+              ┌──────────┐
+              │   User   │
+              └─────┬────┘
+                    │
+                    │ 4. Request + Token/Session
+                    │    "I want to access /admin/users"
+                    ▼
+          ┌──────────────────────┐
+          │   Authorization      │
+          │      Server          │
+          │  "What can you do?"  │
+          └──────────┬───────────┘
+                     │
+         ┌───────────┴───────────┐
+         │                       │
+    ✅ Authorized          ❌ Forbidden
+    "User is admin"       "User is regular"
+         │                       │
+         ▼                       ▼
+   ┌──────────┐            ┌──────────┐
+   │ Resource │            │  Error   │
+   │ (Data)   │            │  403     │
+   └──────────┘            └──────────┘
+```
+
+**Complete Flow**:
+```
+User → Login (Authentication) → Token/Session
+                                      ↓
+Request + Token → Server checks (Authorization) → Resource
+```
+
+**Key Points**:
+- **Authentication happens FIRST**: Prove your identity
+- **Authorization happens SECOND**: Check permissions
+- **Token/Session is the proof**: Carries identity info
+- **Every request needs both**: Identify user, then check access
+
 ## Session-Based Authentication 🎫
 
 The traditional way to authenticate web users.
@@ -979,3 +1047,106 @@ Now that you understand authentication, you're ready to learn about **REST API D
 ## Practice
 
 Complete the exercises in [exercises.md](./exercises.md) to implement authentication!
+
+## 📚 Additional Resources in This Module
+
+This module includes comprehensive resources to help you master authentication:
+
+### 📁 Code Examples (`examples/`)
+Working implementations of all authentication methods:
+- `01_session_auth.py` - Session-based authentication with bcrypt
+- `02_jwt_auth.py` - JWT with refresh tokens
+- `03_api_key_auth.py` - API key authentication with rate limiting
+- `04_oauth_example.py` - GitHub OAuth 2.0 integration
+- `05_vulnerable_auth.py` - Intentionally vulnerable app for security testing
+- `README.md` - Guide to using all examples
+- `requirements.txt` - Python dependencies
+
+### 🏋️ Hands-On Exercises (`exercises.md`)
+Seven comprehensive exercises:
+1. Session-based authentication
+2. JWT authentication with refresh tokens
+3. API key authentication and rate limiting
+4. OAuth 2.0 integration
+5. Security testing and exploitation
+6. Postman collection testing
+7. Build your own authentication system
+
+### 📮 Postman Collections (`postman/`)
+Ready-to-use API testing collections:
+- `Session-Auth-Collection.json` - Test session authentication
+- `JWT-Auth-Collection.json` - Test JWT authentication
+- `README.md` - Guide to using Postman collections
+
+### 🔒 Security Resources
+- `security_testing.md` - Comprehensive security testing guide
+  - Common vulnerabilities and how to find them
+  - Testing methodology
+  - Exploitation techniques
+  - Remediation strategies
+  - Security testing report template
+
+### 🛠️ Troubleshooting
+- `common_errors.md` - Solutions to common authentication issues
+  - Session authentication errors
+  - JWT errors and fixes
+  - API key issues
+  - OAuth problems
+  - Debugging tips
+
+### 🎯 Quick Start
+
+1. **Install dependencies**:
+   ```bash
+   cd examples
+   pip install -r requirements.txt
+   ```
+
+2. **Run an example**:
+   ```bash
+   python 01_session_auth.py
+   ```
+
+3. **Test with curl**:
+   ```bash
+   curl -X POST http://localhost:5000/register \
+     -H "Content-Type: application/json" \
+     -d '{"username":"test","password":"test123","email":"test@example.com"}'
+   ```
+
+4. **Or import Postman collection**:
+   - Open Postman
+   - Import `postman/Session-Auth-Collection.json`
+   - Run the collection
+
+### 📖 Learning Path
+
+**Beginners**: Start here
+1. Read the main README sections
+2. Run `examples/01_session_auth.py`
+3. Complete Exercise 1 in `exercises.md`
+4. Try the Postman collection
+
+**Intermediate**: Build your skills
+1. Implement JWT authentication (Exercise 2)
+2. Add API key authentication (Exercise 3)
+3. Integrate OAuth (Exercise 4)
+4. Test with Postman collections
+
+**Advanced**: Security focus
+1. Read `security_testing.md`
+2. Exploit vulnerabilities in `examples/05_vulnerable_auth.py`
+3. Write security test reports
+4. Build your own secure authentication (Exercise 7)
+
+### 🔗 External Resources
+
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [JWT.io](https://jwt.io) - JWT debugger and documentation
+- [OAuth 2.0 Simplified](https://www.oauth.com/)
+- [Flask-Login Documentation](https://flask-login.readthedocs.io/)
+- [bcrypt Documentation](https://github.com/pyca/bcrypt/)
+
+---
+
+Happy coding! If you complete all exercises, you'll have production-ready authentication knowledge! 🚀
