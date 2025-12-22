@@ -2,6 +2,8 @@
 
 A fully-functional REST API that you can run locally for hands-on practice. This API includes authentication, CRUD operations, database integration, and intentional error scenarios for learning.
 
+⚠️ **IMPORTANT: This is for educational purposes only!** This API uses simplified security implementations to make learning easier. Do not use this code in production without proper security hardening.
+
 ## 🎯 Features
 
 - ✅ **Complete REST API** - All CRUD operations
@@ -425,6 +427,26 @@ This API demonstrates:
 - **Error Handling** - Proper HTTP status codes
 - **Validation** - Input checking
 - **Rate Limiting** - Request throttling
+
+## 🔒 Security Notes
+
+This API is designed for **learning purposes only**. It contains simplified implementations:
+
+⚠️ **Security Considerations:**
+- Uses SHA-256 for passwords (production should use bcrypt/Argon2 with salt)
+- Hardcoded secret key (production should use environment variables)
+- Debug mode enabled (never use in production!)
+- No HTTPS enforcement (production needs TLS/SSL)
+- Basic rate limiting (production should use proper libraries)
+
+**For Production:**
+- Use proper password hashing (bcrypt, scrypt, Argon2)
+- Store secrets in environment variables
+- Use a production WSGI server (gunicorn, uWSGI)
+- Enable HTTPS with valid certificates
+- Implement proper rate limiting (Flask-Limiter)
+- Add comprehensive logging and monitoring
+- Use a production database (PostgreSQL, MySQL)
 
 ## 🎓 Next Steps
 

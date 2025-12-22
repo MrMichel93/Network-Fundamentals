@@ -836,5 +836,10 @@ if __name__ == '__main__':
     print('   2. Login: POST /api/auth/login')
     print('   3. Create Post: POST /api/posts (with token)')
     print('=' * 60)
+    print('⚠️  WARNING: Running in DEBUG mode for educational purposes')
+    print('   Never use debug=True in production!')
+    print('=' * 60)
     
+    # NOTE: debug=True is used for learning purposes only
+    # In production, use a production WSGI server like gunicorn
     app.run(debug=True, host='0.0.0.0', port=5000)
