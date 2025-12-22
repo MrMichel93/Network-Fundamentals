@@ -2,12 +2,29 @@
 
 Welcome to the **Networking Fundamentals** course! This comprehensive course is designed for beginner to intermediate programmers who want to understand how networked applications communicate.
 
+## ⚡ Quick Start (30 Minutes to First API Call!)
+
+**Want to get hands-on right away?** Our [Quick Start Guide](./QUICK-START.md) will have you making API calls in just 30 minutes!
+
+1. Install Postman (5 min)
+2. Make your first request (5 min)
+3. Understand the response (10 min)
+4. Try different endpoints (10 min)
+
+**Then proceed to Module 01 with real experience!**
+
+---
+
 ## 🎯 Course Overview
 
 This course will take you from basic networking concepts to building real-time web applications. You'll learn how data flows across the internet, how to build and consume APIs, and how to create interactive networked applications.
 
-**Estimated Time:** 4-6 weeks (2-3 hours per week)  
+**Estimated Time:** 8 weeks (2-3 hours per week)  
 **Target Audience:** High school students or self-learners with basic programming knowledge
+
+## 📊 Track Your Progress
+
+Use our [Progress Tracker](./PROGRESS.md) to keep track of completed modules, projects, and skills as you work through the course!
 
 ## 🎯 What You'll Build
 
@@ -56,51 +73,119 @@ By the end of this course, you'll build:
 
 ## 🗂️ Course Structure
 
-> **📦 Note**: The course has been restructured! See [MIGRATION.md](./MIGRATION.md) for details.
+> **📦 Note**: The course has been restructured! See [MIGRATION.md](./MIGRATION.md) for details on what changed and how to navigate the new organization.
+
+### 🗺️ Visual Course Map
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     🚀 START HERE                                │
+│                                                                  │
+│  ⚡ Quick Start Guide (30 min) → Make your first API call!      │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  WEEK 1-2: FOUNDATIONS 🏗️                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  00. Prerequisites      → Ready your environment                │
+│  01. Internet Basics    → IP, DNS, packets, routing             │
+│  02. Web Fundamentals   → URLs, browsers, client-server         │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  WEEK 3-4: HTTP & APIs 🌐                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  03. Developer Tools    → Postman, curl, DevTools               │
+│  04. HTTP Fundamentals  → Methods, status codes, headers        │
+│  05. Working With APIs  → Making requests, handling responses   │
+│  06. Authentication ⭐  → Sessions, JWT, OAuth 2.0              │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  WEEK 5-6: DATA & SECURITY 🔒                                   │
+├─────────────────────────────────────────────────────────────────┤
+│  07. REST API Design    → RESTful principles, best practices    │
+│  08. Databases ⭐       → SQL, NoSQL, persistence               │
+│  09. API Security       → Input validation, XSS, SQL injection  │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  WEEK 7-8: REAL-TIME & PRODUCTION 🚀                            │
+├─────────────────────────────────────────────────────────────────┤
+│  10. WebSockets         → Real-time communication               │
+│  11. Other Protocols    → TCP, UDP, FTP, SMTP, SSH              │
+│  12. HTTPS and TLS      → Encryption, certificates              │
+│  13. Security Practices → OWASP Top 10, defense in depth        │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  HANDS-ON PROJECTS 🛠️                                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Project 1: Weather API Client                                  │
+│  Project 2: URL Shortener Service                               │
+│  Project 3: Real-time Dashboard                                 │
+│  Capstone: Your Own Application!                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 📚 Module Details
 
 ### [00. Prerequisites](./00-Prerequisites/)
 Get ready for the course! Learn what you need to know before starting.
 
-### [01. Internet Basics](./01-Internet-Basics/) ✨ NEW
+### 📚 Module Details
+
+#### Foundations (Weeks 1-2)
+
+##### [00. Prerequisites](./00-Prerequisites/)
+Get ready for the course! Learn what you need to know before starting.
+
+##### [01. Internet Basics](./01-Internet-Basics/) ✨ NEW
 Understand how data travels, IP addresses, DNS, network layers, and the fundamentals of internet communication.
 
-### [02. How The Web Works](./02-How-The-Web-Works/) ✨ NEW
+##### [02. How The Web Works](./02-How-The-Web-Works/) ✨ NEW
 Learn about clients and servers, URLs and domains, and how browsers work behind the scenes.
 
-### [03. Developer Tools Setup](./03-Developer-Tools-Setup/) ✨ NEW
+#### HTTP & APIs (Weeks 3-4)
+
+##### [03. Developer Tools Setup](./03-Developer-Tools-Setup/) ✨ NEW
 Master browser DevTools, Postman, curl, and HTTPie for testing and debugging networked applications.
 
-### [04. HTTP Fundamentals](./04-HTTP-Fundamentals/)
+##### [04. HTTP Fundamentals](./04-HTTP-Fundamentals/)
 Deep dive into the HTTP protocol, request/response cycle, methods, status codes, and headers.
 
-### [05. Working With APIs](./05-Working-With-APIs/) ✨ NEW
+##### [05. Working With APIs](./05-Working-With-APIs/) ✨ NEW
 Make requests with different tools, read API documentation, handle responses, and work with real APIs.
 
-### [06. Authentication and Authorization](./06-Authentication-and-Authorization/) ✨ NEW ⭐ CRITICAL
+##### [06. Authentication and Authorization](./06-Authentication-and-Authorization/) ✨ NEW ⭐ CRITICAL
 Learn about session-based auth, JWT tokens, OAuth 2.0, API keys, and security best practices.
 
-### [07. REST API Design](./07-REST-API-Design/)
+#### Data & Security (Weeks 5-6)
+
+##### [07. REST API Design](./07-REST-API-Design/)
 Master RESTful principles, resource design, CRUD operations, and API best practices.
 
-### [08. Databases for APIs](./08-Databases-for-APIs/) ✨ NEW ⭐ CRITICAL
+##### [08. Databases for APIs](./08-Databases-for-APIs/) ✨ NEW ⭐ CRITICAL
 Connect APIs to databases (SQL and NoSQL), implement data persistence, and design database schemas.
 
-### [09. API Security](./09-API-Security/) ✨ NEW
+##### [09. API Security](./09-API-Security/) ✨ NEW
 Input validation, rate limiting, CORS, SQL injection prevention, and XSS protection.
 
-### [10. WebSockets](./10-WebSockets/)
+#### Real-Time & Production (Weeks 7-8)
+
+##### [10. WebSockets](./10-WebSockets/)
 Explore real-time communication, understand when to use WebSockets, and build interactive applications.
 
-### [11. Other Protocols](./11-Other-Protocols/)
+##### [11. Other Protocols](./11-Other-Protocols/)
 Learn about TCP, UDP, FTP, SMTP, SSH protocols and when to use each.
 
-### [12. HTTPS and TLS](./12-HTTPS-and-TLS/) ✨ EXPANDED
+##### [12. HTTPS and TLS](./12-HTTPS-and-TLS/) ✨ EXPANDED
 Understand encryption, certificates, man-in-the-middle attacks, and how to set up HTTPS.
 
-### [13. Network Security Best Practices](./13-Network-Security-Best-Practices/) ✨ EXPANDED
+##### [13. Network Security Best Practices](./13-Network-Security-Best-Practices/) ✨ EXPANDED
 Comprehensive security review, defense in depth, security testing, and OWASP Top 10.
 
-### Supporting Resources
+### 🎯 Supporting Resources
 
 #### [Debugging Exercises](./debugging-exercises/) ✨ NEW
 Tool-specific practice exercises for debugging common networking issues.
@@ -117,13 +202,32 @@ Visual representations of networking concepts and system architectures.
 #### [Interview Prep](./interview-prep/) ✨ NEW
 Networking interview questions, answers, and preparation materials.
 
-### [Projects](./Projects/)
-Apply your knowledge with three progressive hands-on projects:
-1. Weather API Client
-2. URL Shortener Service
-3. Real-time Dashboard
+### 🛠️ [Projects](./Projects/)
 
-### [Resources](./Resources/)
+Apply your knowledge with three progressive hands-on projects that integrate multiple concepts:
+
+#### [Project 1: Weather API Client](./Projects/01-weather-api-client.md)
+Build a client that fetches weather data from an external API with proper error handling and caching.
+- **Skills:** HTTP requests, API consumption, error handling
+- **Difficulty:** Beginner
+- **Time:** 3-4 hours
+
+#### [Project 2: URL Shortener Service](./Projects/02-url-shortener.md)
+Create a complete URL shortening service with database persistence and analytics.
+- **Skills:** REST API design, databases, authentication
+- **Difficulty:** Intermediate
+- **Time:** 6-8 hours
+
+#### [Project 3: Real-time Dashboard](./Projects/03-realtime-dashboard.md)
+Develop a real-time data dashboard using WebSockets for live updates.
+- **Skills:** WebSockets, real-time communication, data visualization
+- **Difficulty:** Advanced
+- **Time:** 8-10 hours
+
+#### Capstone Project (Optional)
+Design and build your own networked application combining all learned concepts!
+
+### 📖 [Resources](./Resources/)
 Additional materials including glossary, tools guide, and further reading.
 
 ## ✅ Are You Ready?
@@ -162,12 +266,40 @@ WebSockets → Protocols → HTTPS → Best Practices
 
 Our course structure follows a carefully designed pedagogical approach:
 
-- **Master HTTP before REST** - You need to understand the foundation protocol before diving into architectural patterns built on top of it
-- **Learn to consume APIs before building them** - Understanding how to use APIs effectively makes you a better API designer
-- **Practice with tools before complex concepts** - Hands-on experience with DevTools and Postman builds confidence before tackling authentication and security
-- **Security threaded throughout, not bolted on at end** - Security best practices are integrated into each module, not treated as an afterthought
+1. **Start with hands-on experience** - The [Quick Start Guide](./QUICK-START.md) gets you making API calls immediately, so you have context for the theory
+
+2. **Foundation before complexity** - Understanding how the internet and web work provides essential context for everything that follows
+
+3. **Tools before deep theory** - Learning Postman and DevTools early gives you the ability to explore and experiment
+
+4. **Master HTTP before REST** - You need to understand the foundation protocol before diving into architectural patterns built on top of it
+
+5. **Consume before you build** - Understanding how to use APIs effectively makes you a better API designer
+
+6. **Security integrated throughout** - Security best practices are woven into each module, not bolted on at the end
+
+7. **Theory → Practice → Projects** - Each module teaches concepts, provides exercises, then projects integrate multiple concepts
 
 This progression ensures you build a solid foundation while maintaining engagement through practical, hands-on learning.
+
+## 🗺️ New Structure Overview
+
+The course has been **reorganized and expanded** from 7 to 14 modules! Here's what's new:
+
+### What Changed?
+- **Split modules** for better focus (Internet Basics + Web Fundamentals)
+- **Added critical topics** that were missing (Authentication, Databases)
+- **Expanded security** from one module to three comprehensive modules
+- **New practical resources** (debugging exercises, security labs, architecture diagrams)
+
+### Migration Guide
+If you started the course before the restructure, see [MIGRATION.md](./MIGRATION.md) for:
+- Detailed mapping from old to new modules
+- What content moved where
+- Which new modules are essential to take
+- How to continue your learning journey
+
+---
 
 ## 🛠️ Tools We'll Use
 
@@ -326,7 +458,41 @@ This course is open source and available for educational purposes.
 
 ## 🌟 Get Started!
 
-Ready to dive in? Head over to [00-Prerequisites](./00-Prerequisites/) to begin your networking journey!
+Choose your path:
+
+### 🚀 Quick Start (Recommended)
+**Want to jump right in?** Start with the [Quick Start Guide](./QUICK-START.md) - make your first API call in 30 minutes!
+
+### 📚 Traditional Path
+**Prefer the full course?** Begin with [00-Prerequisites](./00-Prerequisites/) and follow the modules in order.
+
+### 📊 Track Progress
+Use the [Progress Tracker](./PROGRESS.md) to keep track of your learning journey!
+
+---
+
+## 🔗 Key Resources
+
+### Essential Links
+- **[Quick Start Guide](./QUICK-START.md)** - 30 minutes to your first API call
+- **[Progress Tracker](./PROGRESS.md)** - Track modules, projects, and skills
+- **[Migration Guide](./MIGRATION.md)** - Explains the new course structure
+- **[Setup Guide](./setup.md)** - Platform-specific installation instructions
+- **[FAQ](./FAQ.md)** - Common questions and troubleshooting
+- **[Contributing Guide](./CONTRIBUTING.md)** - How to improve the course
+
+### Module Navigation
+- [00. Prerequisites](./00-Prerequisites/) - Get ready to start
+- [01. Internet Basics](./01-Internet-Basics/) - How data travels
+- [02. How The Web Works](./02-How-The-Web-Works/) - Client-server fundamentals
+- [03. Developer Tools Setup](./03-Developer-Tools-Setup/) - Essential tooling
+- [View Full Module List →](#-module-details)
+
+### Projects & Practice
+- [Projects Directory](./Projects/) - Three hands-on projects
+- [Debugging Exercises](./debugging-exercises/) - Practice troubleshooting
+- [Security Labs](./security-labs/) - Hands-on security practice
+- [API Examples](./api-examples/) - Sample implementations
 
 ---
 
