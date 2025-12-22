@@ -1432,7 +1432,8 @@ A: 1. **Review related modules** - refresh concepts
 
 **Q: How do I run the examples?**
 
-A: ```bash
+A: 
+```bash
 # Python examples
 python example_file.py
 
