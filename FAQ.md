@@ -728,54 +728,7 @@ if __name__ == '__main__':
 
 Solutions are in the `solutions/` folder. Try exercises yourself first before checking solutions!
 
-### Can I skip the exercises?
-
-**Not recommended!** Exercises are where real learning happens. You can:
-- Try on your own first
-- Check hints if stuck
-- Look at solutions after attempting
-- Build your own variations
-
-### I'm stuck on a project. What should I do?
-
-1. **Review related modules** - refresh concepts
-2. **Read error messages carefully** - they often tell you what's wrong
-3. **Use print/console.log** for debugging
-4. **Break down the problem** into smaller pieces
-5. **Check the hints** in the project file
-6. **Search for similar examples** online
-7. **Ask for help** - open a GitHub issue
-
-### How do I run the examples?
-
-```bash
-# Python examples
-python example_file.py
-
-# Make sure dependencies are installed
-pip install -r requirements.txt
-
-# For HTML files
-# Open in browser or use:
-python -m http.server 8000
-# Then visit http://localhost:8000
-```
-
-### The code examples don't work
-
-**Check:**
-1. ✅ Dependencies installed? (`pip install -r requirements.txt`)
-2. ✅ Virtual environment activated?
-3. ✅ Using Python 3.7+? (check with `python --version`)
-4. ✅ Correct working directory?
-5. ✅ Server running (for client examples)?
-6. ✅ Port available (not already in use)?
-
-If still stuck, open an issue with:
-- Error message (full text)
-- Python version
-- Operating system
-- What you tried
+---
 
 ## Tool Comparisons
 
