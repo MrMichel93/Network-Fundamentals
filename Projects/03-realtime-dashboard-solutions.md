@@ -495,7 +495,13 @@ async def get_system_metrics():
     try:
         cpu_percent = psutil.cpu_percent(interval=0.1)
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        # Use platform-appropriate disk path
+        try:
+            disk = psutil.disk_usage('/')
+        except:
+            # Fallback for Windows
+            import os
+            disk = psutil.disk_usage(os.path.abspath(os.sep))
         net_io = psutil.net_io_counters()
         
         return {

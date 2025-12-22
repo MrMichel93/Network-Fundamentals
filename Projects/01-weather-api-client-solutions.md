@@ -93,7 +93,7 @@ def display_weather(data):
     feels_like = data['main']['feels_like']
     humidity = data['main']['humidity']
     description = data['weather'][0]['description']
-    wind_speed = data['main'].get('speed', 0)
+    wind_speed = data['wind'].get('speed', 0)
     
     # Display formatted weather information
     print("\n" + "="*50)

@@ -70,11 +70,13 @@ def generate_short_code(length=6):
 def is_valid_url(url):
     """Validate URL format."""
     # Simple regex for URL validation
+    # Note: This allows localhost and private IPs - in production,
+    # you should block these for security (see Approach 2)
     pattern = re.compile(
         r'^https?://'  # http:// or https://
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain
-        r'localhost|'  # localhost
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # or IP
+        r'localhost|'  # localhost (consider blocking in production)
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # or IP (consider blocking private IPs)
         r'(?::\d+)?'  # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
     
