@@ -1,0 +1,14 @@
+# Database file
+practice_api.db
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
