@@ -860,7 +860,7 @@ database = shards[shard_id]
 
 **Solutions:**
 1. **Cache at multiple levels**:
-   - CDN (CloudFlare, CloudFront)
+   - CDN (Cloudflare, CloudFront)
    - Local cache on each server
    - Reduces backend load to near zero
 
@@ -1568,7 +1568,7 @@ audit_log = {
        │
        ▼
 ┌─────────────┐
-│     CDN     │  CloudFlare/CloudFront
+│     CDN     │  Cloudflare/CloudFront
 │  (DDoS      │  - DDoS protection
 │   Protection│  - Rate limiting
 │   & Caching)│  - SSL termination

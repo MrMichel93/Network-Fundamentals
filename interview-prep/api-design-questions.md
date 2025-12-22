@@ -469,7 +469,7 @@ Content-Type: application/json
   - **Time-based**: Cache for fixed duration
   - **Conditional requests**: Use `If-None-Match` (ETag), return `304 Not Modified`
 - **Layers**:
-  - CDN (CloudFlare, CloudFront)
+  - CDN (Cloudflare, CloudFront)
   - Application (Redis, Memcached)
   - Database query cache
 - **Invalidation**: Hardest part
