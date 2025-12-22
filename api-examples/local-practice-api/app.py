@@ -25,6 +25,8 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Configuration
+# NOTE: For educational purposes only!
+# In production, use environment variables: os.environ.get('SECRET_KEY')
 SECRET_KEY = 'your-secret-key-change-in-production'
 DATABASE = 'practice_api.db'
 TOKEN_EXPIRY = 24  # hours
@@ -88,7 +90,13 @@ def init_db():
 
 
 def hash_password(password):
-    """Hash a password using SHA-256"""
+    """
+    Hash a password using SHA-256
+    
+    NOTE: For educational purposes only!
+    In production, use bcrypt, scrypt, or Argon2 with proper salting.
+    SHA-256 alone is vulnerable to rainbow table attacks.
+    """
     return hashlib.sha256(password.encode()).hexdigest()
 
 
@@ -119,7 +127,13 @@ def decode_token(token):
 
 
 def rate_limit_check(ip_address):
-    """Check if IP has exceeded rate limit"""
+    """
+    Check if IP has exceeded rate limit
+    
+    NOTE: This is a basic implementation for educational purposes.
+    In production, use Flask-Limiter or similar libraries.
+    This function is currently not enforced - you can add it as an exercise!
+    """
     now = time.time()
     minute_ago = now - 60
     
@@ -441,9 +455,35 @@ def update_current_user():
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
     """Get all posts with optional filtering and pagination"""
-    # Query parameters
-    page = int(request.args.get('page', 1))
-    limit = int(request.args.get('limit', 10))
+    # Query parameters with validation
+    try:
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 10))
+    except (ValueError, TypeError):
+        return jsonify({
+            'error': {
+                'code': 'VALIDATION_ERROR',
+                'message': 'Page and limit must be valid integers'
+            }
+        }), 400
+    
+    # Validate ranges
+    if page < 1:
+        return jsonify({
+            'error': {
+                'code': 'VALIDATION_ERROR',
+                'message': 'Page must be greater than 0'
+            }
+        }), 400
+    
+    if limit < 1 or limit > 100:
+        return jsonify({
+            'error': {
+                'code': 'VALIDATION_ERROR',
+                'message': 'Limit must be between 1 and 100'
+            }
+        }), 400
+    
     author = request.args.get('author')
     
     offset = (page - 1) * limit
