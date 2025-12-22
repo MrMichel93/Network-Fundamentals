@@ -8,6 +8,7 @@ Tools for testing rate limiters.
 
 import requests
 import time
+import concurrent.futures
 from datetime import datetime
 
 def test_rate_limit_basic(url, max_requests=15, delay=0.1):
@@ -61,8 +62,6 @@ def test_concurrent_requests(url, num_requests=10):
     """
     Test with concurrent requests.
     """
-    import concurrent.futures
-    
     print(f"\n{'='*60}")
     print(f"Testing Concurrent Requests: {url}")
     print(f"Making {num_requests} concurrent requests")

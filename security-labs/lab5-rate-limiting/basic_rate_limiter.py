@@ -78,10 +78,22 @@ def unlimited():
 @app.errorhandler(429)
 def ratelimit_handler(e):
     """Custom handler for rate limit exceeded"""
+    retry_after = 'unknown'
+    error_desc = str(e.description)
+    
+    # Safely extract retry_after value
+    if 'Retry after' in error_desc:
+        try:
+            parts = error_desc.split('Retry after')
+            if len(parts) > 1:
+                retry_after = parts[1].strip()
+        except Exception:
+            pass
+    
     return jsonify({
         'error': 'Rate limit exceeded',
-        'message': str(e.description),
-        'retry_after': e.description.split('Retry after')[1].strip() if 'Retry after' in str(e.description) else 'unknown'
+        'message': error_desc,
+        'retry_after': retry_after
     }), 429
 
 if __name__ == '__main__':

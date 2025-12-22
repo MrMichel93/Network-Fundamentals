@@ -87,7 +87,9 @@ def login():
     username = data.get('username', '')
     password = data.get('password', '')
     
-    # DANGER: String concatenation with user input!
+    conn = sqlite3.connect(DB_FILE)
+    # ⚠️ DANGER: String concatenation with user input - NEVER DO THIS IN PRODUCTION!
+    # This vulnerable code is for educational demonstration only!
     query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
     
     # DANGER: Logging the query exposes the vulnerability

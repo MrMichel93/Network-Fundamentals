@@ -87,12 +87,18 @@ def get_products():
 
 @app.route('/api/product')
 def get_product():
-    """VULNERABLE: SQL Injection in product lookup"""
+    """
+    ⚠️ EDUCATIONAL VULNERABILITY - DO NOT USE IN PRODUCTION ⚠️
+    
+    VULNERABLE: SQL Injection in product lookup
+    This code is intentionally insecure for learning purposes.
+    """
     product_id = request.args.get('id', '1')
     
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    # VULNERABLE: Direct string concatenation
+    # ⚠️ DANGEROUS: Direct string concatenation enables SQL injection!
+    # This is vulnerable code for educational purposes only!
     query = f"SELECT * FROM products WHERE id = {product_id}"
     
     try:
