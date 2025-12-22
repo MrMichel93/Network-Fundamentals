@@ -41,3 +41,7 @@ htmlcov/
 *.tmp
 *.bak
 .temp/
+
+# Security Labs - Databases (intentionally vulnerable)
+security-labs/**/*.db
+*.db
