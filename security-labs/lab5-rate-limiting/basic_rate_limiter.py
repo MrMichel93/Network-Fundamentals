@@ -107,4 +107,7 @@ if __name__ == '__main__':
     print("  /api/unlimited - No limit (vulnerable)")
     print("="*60 + "\n")
     
+    # NOTE: debug=True is acceptable for educational lab environment
+    # In production, always use debug=False
+    # Lab runs on localhost only (127.0.0.1)
     app.run(debug=True, host='127.0.0.1', port=5006)

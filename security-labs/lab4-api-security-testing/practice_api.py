@@ -144,4 +144,7 @@ if __name__ == '__main__':
     print("\nUse OWASP ZAP to scan this API for vulnerabilities!")
     print("="*60 + "\n")
     
+    # NOTE: debug=True is intentional for educational lab environment
+    # This should NEVER be used in production
+    # Lab runs on localhost only (127.0.0.1)
     app.run(debug=True, host='127.0.0.1', port=5005)

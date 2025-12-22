@@ -316,4 +316,7 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     print("Server: http://localhost:5001\n")
     
+    # NOTE: debug=True is intentional for educational lab environment
+    # This should NEVER be used in production
+    # Lab runs on localhost only (127.0.0.1)
     app.run(debug=True, host='127.0.0.1', port=5001)
