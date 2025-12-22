@@ -51,6 +51,64 @@ def create_user():
     return jsonify({"id": str(result.inserted_id)}), 201
 ```
 
+### API-Database Architecture Diagram
+
+Here's a visual representation of how APIs interact with databases:
+
+```
+API-Database Architecture:
+
+┌──────────┐
+│  Client  │
+└────┬─────┘
+     │ HTTP Request
+     ▼
+┌─────────────┐     ┌──────────────┐
+│   API       │────>│   Database   │
+│  (Flask)    │<────│  (SQLite)    │
+└─────────────┘     └──────────────┘
+     │ SQL Query         │ Result
+     │                   │
+     │ HTTP Response     │
+     ▼                   │
+┌──────────┐            │
+│  Client  │            │
+└──────────┘            │
+
+Request Flow:
+1. Client sends POST /api/tasks {"title": "Learn"}
+2. API validates input
+3. API executes: INSERT INTO tasks...
+4. Database stores data, returns ID
+5. API responds: {"id": 1, "title": "Learn"}
+```
+
+**Architecture Components:**
+
+- **Client**: Web browser, mobile app, or any HTTP client
+  - Sends HTTP requests to the API
+  - Receives HTTP responses with data
+
+- **API Server**: Application layer (Flask, Django, Node.js)
+  - Receives and validates client requests
+  - Translates HTTP requests to database queries
+  - Processes database results
+  - Sends formatted responses to clients
+
+- **Database**: Data storage layer (SQLite, PostgreSQL, MongoDB)
+  - Stores persistent data
+  - Executes queries (SELECT, INSERT, UPDATE, DELETE)
+  - Returns results to API
+
+**Data Flow Example:**
+1. Client wants to create a task
+2. Sends POST request with task data
+3. API validates the data
+4. API constructs SQL INSERT query
+5. Database saves the task and returns new ID
+6. API formats response with task details
+7. Client receives confirmation
+
 ## Database Basics 📚
 
 ### What is a Database?

@@ -61,6 +61,52 @@ The web works on a client-server model:
 
 ### The Client-Server Conversation
 
+Here's a detailed visual representation of client-server interaction:
+
+```
+Client-Server Request Flow:
+
+Browser                                      Server
+   |                                           |
+   |─────1. Request HTML──────────────────────>|
+   |   GET /index.html HTTP/1.1                |
+   |                                           |─── Process
+   |<────2. Send HTML──────────────────────────|
+   |   200 OK + HTML content                   |
+   |                                           |
+   |─── Parse HTML                             |
+   |─── Find CSS reference                     |
+   |                                           |
+   |─────3. Request CSS───────────────────────>|
+   |   GET /styles.css HTTP/1.1                |
+   |                                           |
+   |<────4. Send CSS───────────────────────────|
+   |   200 OK + CSS content                    |
+   |                                           |
+   |─────5. Request JS────────────────────────>|
+   |   GET /script.js HTTP/1.1                 |
+   |                                           |
+   |<────6. Send JS────────────────────────────|
+   |   200 OK + JavaScript                     |
+   |                                           |
+   |─────7. Request Images (parallel)─────────>|
+   |   GET /logo.png                           |
+   |   GET /banner.jpg                         |
+   |   GET /icon.svg                           |
+   |                                           |
+   |<────8. Send All Images────────────────────|
+   |   200 OK + image data                     |
+   |                                           |
+   |─── Render complete page                   |
+```
+
+**Key Points:**
+- **Multiple Requests**: One web page requires multiple HTTP requests
+- **Sequential Loading**: HTML first, then resources referenced in HTML
+- **Parallel Downloads**: Modern browsers download multiple resources simultaneously
+- **Each Request Independent**: Server doesn't remember previous requests (stateless)
+
+**Example Conversation:**
 ```
 Client: "Hey server, can I have the homepage?"
 Server: "Sure! Here's the HTML."

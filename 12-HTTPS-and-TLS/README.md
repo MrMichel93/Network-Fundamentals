@@ -59,13 +59,118 @@ Client encrypts with public key → Server decrypts with private key
 
 ### TLS Handshake
 
+Here's a detailed visual representation of the TLS handshake process:
+
 ```
-1. Client → Server: "Hello, I want HTTPS"
-2. Server → Client: "Here's my certificate and public key"
-3. Client verifies certificate
-4. Client → Server: Encrypted session key (using server's public key)
-5. Both use session key for symmetric encryption (faster!)
+TLS Handshake Flow:
+
+Client                                                Server
+  |                                                     |
+  |──────1. ClientHello───────────────────────────────>|
+  |   "I want TLS 1.3"                                  |
+  |   "I support these ciphers: [AES, ChaCha20...]"    |
+  |   Random number: abc123                             |
+  |                                                     |
+  |<─────2. ServerHello────────────────────────────────|
+  |        "Let's use TLS 1.3"                          |
+  |        "Cipher: AES-256-GCM"                        |
+  |        Random number: xyz789                        |
+  |        Certificate: [Digital Certificate]           |
+  |        Server public key: [Public Key]              |
+  |                                                     |
+  |───3. Verify Certificate                             |
+  |   ✓ Signed by trusted CA?                           |
+  |   ✓ Domain matches?                                 |
+  |   ✓ Not expired?                                    |
+  |   ✓ Not revoked?                                    |
+  |                                                     |
+  |──────4. Key Exchange──────────────────────────────>|
+  |   Generate pre-master secret                        |
+  |   Encrypt with server's public key                  |
+  |   [Encrypted: $@#K%^...]                            |
+  |                                                     |
+  |                                                     |───5. Decrypt
+  |                                                     |   Use private key
+  |                                                     |   Get pre-master secret
+  |                                                     |
+  |───6. Both derive session key                        |
+  |   Client: pre-master + randoms → session key        |
+  |                                     session key ←───| Server: same process
+  |                                                     |
+  |──────7. Finished──────────────────────────────────>|
+  |   [Encrypted with session key]                      |
+  |                                                     |
+  |<─────8. Finished───────────────────────────────────|
+  |        [Encrypted with session key]                 |
+  |                                                     |
+  |═════════════════════════════════════════════════════| Secure connection!
+  |                                                     |
+  |───── Encrypted HTTP Request ───────────────────────>|
+  |      [All data encrypted with session key]          |
+  |                                                     |
+  |<──── Encrypted HTTP Response ───────────────────────|
+  |      [All data encrypted with session key]          |
+
+
+Encryption Methods Comparison:
+
+Asymmetric (Public/Private Key):
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   Message   │ ──────> │   Encrypt   │ ──────> │  Encrypted  │
+│   "Hello"   │         │ (Public Key)│         │  "Xk@9#$"   │
+└─────────────┘         └─────────────┘         └─────────────┘
+                                                       │
+                                                       ▼
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   Message   │ <────── │   Decrypt   │ <────── │  Encrypted  │
+│   "Hello"   │         │(Private Key)│         │  "Xk@9#$"   │
+└─────────────┘         └─────────────┘         └─────────────┘
+
+Used for: Initial key exchange (secure but slow)
+
+
+Symmetric (Session Key):
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   Message   │ ──────> │   Encrypt   │ ──────> │  Encrypted  │
+│   "Hello"   │         │(Session Key)│         │  "Ab#3$%"   │
+└─────────────┘         └─────────────┘         └─────────────┘
+                                                       │
+                                                       ▼
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   Message   │ <────── │   Decrypt   │ <────── │  Encrypted  │
+│   "Hello"   │         │(Session Key)│         │  "Ab#3$%"   │
+└─────────────┘         └─────────────┘         └─────────────┘
+
+Used for: All subsequent communication (fast)
+
+
+Man-in-the-Middle Attack (Prevented by TLS):
+
+Without TLS:
+Client ──────> Attacker ──────> Server
+        "pwd"    👁️ Can read!    "pwd"
+
+With TLS:
+Client ──────> Attacker ──────> Server
+      "X@#$"     ❌ Can't read!   "X@#$"
+                 ❌ Can't decrypt!
+                 ❌ Can't modify!
 ```
+
+**TLS Handshake Summary:**
+
+1. **ClientHello**: Client initiates, sends supported protocols
+2. **ServerHello**: Server responds with chosen protocol and certificate
+3. **Certificate Verification**: Client validates server identity
+4. **Key Exchange**: Client sends encrypted session key
+5. **Derive Session Key**: Both compute same session key
+6. **Finished Messages**: Confirm handshake success
+7. **Encrypted Communication**: All data encrypted with session key
+
+**Why Two Types of Encryption?**
+- **Asymmetric**: Secure key exchange but slow
+- **Symmetric**: Fast encryption but need shared key
+- **TLS**: Use asymmetric to share symmetric key, then use symmetric for data
 
 ### The Process in Detail
 

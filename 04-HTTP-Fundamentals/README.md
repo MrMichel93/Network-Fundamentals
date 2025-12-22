@@ -309,6 +309,59 @@ Status codes tell you the result of your request. They're grouped by category:
 
 Headers provide additional information about the request or response. Think of them as metadata or instructions.
 
+### HTTP Request and Response Structure Diagrams
+
+Understanding the structure of HTTP messages is crucial. Here are detailed diagrams:
+
+#### HTTP Request Structure:
+
+```
+GET /api/users/123 HTTP/1.1
+└┬┘ └──────┬───────┘ └───┬───┘
+ │         │             │
+Method    Path        Version
+
+Host: api.example.com
+Content-Type: application/json
+Authorization: Bearer token123
+└────────┬────────────────────┘
+       Headers
+
+{"filters": {"active": true}}
+└──────────┬──────────────────┘
+         Body (optional)
+```
+
+**Request Components:**
+- **Method**: What action to perform (GET, POST, PUT, DELETE, etc.)
+- **Path**: The resource you're requesting (e.g., /api/users/123)
+- **Version**: HTTP protocol version (usually HTTP/1.1 or HTTP/2)
+- **Headers**: Metadata about the request (host, content type, authentication)
+- **Body**: Data being sent (only for POST, PUT, PATCH requests)
+
+#### HTTP Response Structure:
+
+```
+HTTP/1.1 200 OK
+└───┬───┘ └─┬┘
+  Version Status
+
+Content-Type: application/json
+Content-Length: 1234
+└────────┬────────────────────┘
+       Headers
+
+{"id": 123, "name": "John"}
+└──────────┬────────────────┘
+         Body
+```
+
+**Response Components:**
+- **Version**: HTTP protocol version
+- **Status**: Status code and message (200 OK, 404 Not Found, etc.)
+- **Headers**: Metadata about the response (content type, length, caching)
+- **Body**: The actual data being returned (HTML, JSON, images, etc.)
+
 ### Common Request Headers
 
 ```http

@@ -100,6 +100,60 @@ REST maps HTTP methods to CRUD operations:
 | **Update**| PUT/PATCH   | `/resources/id`   | `PUT /users/123`             |
 | **Delete**| DELETE      | `/resources/id`   | `DELETE /users/123`          |
 
+### REST API Architecture Diagram
+
+Here's a complete visual representation of RESTful operations:
+
+```
+RESTful CRUD Operations:
+
+Client                          REST API Server                     Database
+  |                                    |                                |
+  |── POST /users ──────────────────> |                                |
+  |   {"name": "Alice"}                |── Validate input               |
+  |                                    |── INSERT INTO users ──────────>|
+  |                                    |<── Return ID: 123 ─────────────|
+  |<── 201 Created ─────────────────  |                                |
+  |    {"id": 123, "name": "Alice"}    |                                |
+  |                                    |                                |
+  |── GET /users/123 ────────────────> |                                |
+  |                                    |── SELECT * FROM users ────────>|
+  |                                    |<── Return user data ───────────|
+  |<── 200 OK ───────────────────────  |                                |
+  |    {"id": 123, "name": "Alice"}    |                                |
+  |                                    |                                |
+  |── PUT /users/123 ─────────────────>|                                |
+  |   {"name": "Alice Smith"}          |── Validate input               |
+  |                                    |── UPDATE users SET... ────────>|
+  |                                    |<── Confirm update ─────────────|
+  |<── 200 OK ───────────────────────  |                                |
+  |    {"id": 123, "name": "Alice ..."}|                                |
+  |                                    |                                |
+  |── DELETE /users/123 ──────────────>|                                |
+  |                                    |── DELETE FROM users ──────────>|
+  |                                    |<── Confirm deletion ───────────|
+  |<── 204 No Content ───────────────  |                                |
+  |                                    |                                |
+  |── GET /users ─────────────────────>|                                |
+  |                                    |── SELECT * FROM users ────────>|
+  |                                    |<── Return all users ───────────|
+  |<── 200 OK ───────────────────────  |                                |
+  |    [{"id": 123, ...}, ...]         |                                |
+```
+
+**Key Patterns:**
+
+- **POST** (Create): Returns 201 Created with new resource
+- **GET** (Read): Returns 200 OK with resource data
+- **PUT** (Update): Returns 200 OK with updated resource
+- **DELETE** (Delete): Returns 204 No Content
+- **GET Collection**: Returns 200 OK with array of resources
+
+**Resource URLs:**
+- Collection: `/users` (all users)
+- Individual: `/users/123` (specific user)
+- Nested: `/users/123/posts` (user's posts)
+
 ### Detailed Examples
 
 #### Create (POST)

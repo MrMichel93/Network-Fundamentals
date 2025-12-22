@@ -27,6 +27,46 @@ Imagine you want to send a letter to a friend:
 
 The internet works remarkably similarly!
 
+### Client Request Journey Diagram
+
+Here's a detailed visual representation of how a client request travels across the internet:
+
+```
+Client Request Journey:
+
+Your Computer                    The Internet                     Server
+     |                                 |                             |
+     | 1. DNS Lookup                   |                             |
+     |─────────────────DNS Server──────|                             |
+     |←────IP Address 93.184.216.34────|                             |
+     |                                 |                             |
+     | 2. HTTP Request                 |                             |
+     |─────────────────────────────────┼─────────────────────────────>|
+     |   GET /page HTTP/1.1            |                             |
+     |   Host: example.com             |                             |
+     |                                 |                             |
+     | 3. HTTP Response                |                             |
+     |<────────────────────────────────┼─────────────────────────────|
+     |   HTTP/1.1 200 OK               |                             |
+     |   Content-Type: text/html       |                             |
+     |   <html>...</html>              |                             |
+```
+
+**Step-by-Step Breakdown:**
+
+1. **DNS Lookup**: Your computer asks "What's the IP address of example.com?"
+   - DNS server responds with the IP address (e.g., 93.184.216.34)
+   
+2. **HTTP Request**: Your computer sends a request to the server
+   - Uses the HTTP protocol
+   - Includes the requested resource (/page)
+   - Specifies the host (example.com)
+   
+3. **HTTP Response**: The server sends back the requested content
+   - Includes a status code (200 OK means success)
+   - Specifies content type (HTML in this case)
+   - Contains the actual web page data
+
 ## IP Addresses: The Internet's Addressing System
 
 Every device on the internet has a unique **IP (Internet Protocol) address**. It's like a phone number or home address for your computer.

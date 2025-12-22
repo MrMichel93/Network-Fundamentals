@@ -92,6 +92,84 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 
 **3. Now it's a WebSocket connection!** Both can send messages anytime.
 
+### WebSocket Connection Diagram
+
+Here's a detailed visual representation of WebSocket communication:
+
+```
+WebSocket Connection Flow:
+
+Client                                    Server
+  |                                         |
+  |── HTTP Upgrade Request ────────────────>|
+  |   GET /chat HTTP/1.1                    |
+  |   Upgrade: websocket                    |
+  |   Connection: Upgrade                   |
+  |   Sec-WebSocket-Key: xxx                |
+  |                                         |
+  |<─── 101 Switching Protocols ────────────|
+  |    Upgrade: websocket                   |
+  |    Connection: Upgrade                  |
+  |    Sec-WebSocket-Accept: yyy            |
+  |                                         |
+  |═════════════════════════════════════════| ← WebSocket connection established
+  |                                         |
+  |─── Message: "Hello" ────────────────────>|
+  |                                         |
+  |<─── Message: "Hi there!" ────────────────|
+  |                                         |
+  |<─── Message: "New user joined" ──────────| ← Server can push anytime
+  |                                         |
+  |─── Message: "How are you?" ─────────────>|
+  |                                         |
+  |<─── Message: "I'm good!" ────────────────|
+  |                                         |
+  |─── Close connection ────────────────────>|
+  |                                         |
+  |<─── Close acknowledgment ────────────────|
+  |                                         |
+  Connection closed                    Connection closed
+
+
+HTTP Polling vs WebSocket Comparison:
+
+HTTP Polling (Inefficient):
+Client                          Server
+  |                               |
+  |─── GET /messages ───────────> | (1 second)
+  |<─── No new messages ──────────|
+  |                               |
+  |─── GET /messages ───────────> | (1 second)
+  |<─── No new messages ──────────|
+  |                               |
+  |─── GET /messages ───────────> | (1 second)
+  |<─── New message! ─────────────|
+  
+  Problem: 2 wasted requests, 1-3 second delay
+
+WebSocket (Efficient):
+Client                          Server
+  |═══════════════════════════════| ← Always connected
+  |                               |
+  |<─── New message! ─────────────| ← Instant delivery (0ms delay)
+  |                               |
+  |<─── Another message! ─────────| ← Instant delivery
+  
+  Benefit: No wasted requests, instant delivery
+```
+
+**Connection Lifecycle:**
+1. **Handshake**: HTTP upgrade request/response
+2. **Open**: WebSocket connection established
+3. **Message Exchange**: Bidirectional communication
+4. **Close**: Either side can close connection
+
+**Key Differences from HTTP:**
+- **Persistent**: Connection stays open
+- **Bidirectional**: Both sides can send anytime
+- **Low Overhead**: No HTTP headers on each message
+- **Real-time**: Instant message delivery
+
 ### WebSocket URLs
 
 - `ws://` - WebSocket (like HTTP)

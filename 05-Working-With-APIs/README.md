@@ -49,6 +49,69 @@ Let's look at the GitHub API for getting a user:
 
 This tells us everything we need to make the request!
 
+### API Interaction Flow Diagram
+
+Here's a visual representation of the complete API consumption process:
+
+```
+API Consumption Flow:
+
+Developer                    Client App                    API Server
+    |                            |                             |
+    |─── Read API Docs           |                             |
+    |                            |                             |
+    |─── Write Code              |                             |
+    |    (requests.get(...))     |                             |
+    |                            |                             |
+    |─── Run Program ───────────>|                             |
+    |                            |                             |
+    |                            |──── HTTP Request ──────────>|
+    |                            |     GET /users/123          |
+    |                            |     Headers: Auth, Accept   |
+    |                            |                             |
+    |                            |                             |─── Validate
+    |                            |                             |─── Query DB
+    |                            |                             |─── Process
+    |                            |                             |
+    |                            |<─── HTTP Response ──────────|
+    |                            |     200 OK                  |
+    |                            |     {"id": 123, "name": ...}|
+    |                            |                             |
+    |                            |─── Parse JSON               |
+    |                            |─── Handle Data              |
+    |                            |                             |
+    |<─── Display Result ────────|                             |
+    |    "User: John Doe"        |                             |
+```
+
+**Step-by-Step Process:**
+
+1. **Read API Documentation**
+   - Understand endpoints, parameters, authentication
+   - Note response format and error codes
+
+2. **Write Client Code**
+   - Import HTTP library (requests, axios, fetch)
+   - Configure request (URL, headers, body)
+   - Add authentication if needed
+
+3. **Make HTTP Request**
+   - Client sends request to API server
+   - Includes method, headers, and data
+   - Waits for response
+
+4. **Server Processing**
+   - Validates request (auth, params)
+   - Queries database if needed
+   - Processes business logic
+   - Prepares response
+
+5. **Receive Response**
+   - Client gets HTTP response
+   - Parse JSON/XML data
+   - Handle errors (4xx, 5xx)
+   - Display or use data
+
 ## Making Requests with Python 🐍
 
 Python's `requests` library makes API calls easy.

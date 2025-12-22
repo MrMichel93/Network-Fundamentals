@@ -270,27 +270,45 @@ HMACSHA256(
 
 ### How JWT Works
 
+Here's a detailed visual flow of JWT authentication across different scenarios:
+
 ```
-1. User logs in
-   Client → Server: POST /login {username, password}
+JWT Authentication Flow:
 
-2. Server verifies and creates JWT
-   Server: Check credentials
-   Server: Create JWT with user info
+1. Login
+Client                          Server
+  |───POST /login──────────────>|
+  |   {user, pass}               |
+  |                              |── Verify credentials
+  |                              |── Generate JWT
+  |<──200 OK + JWT token────────|
+  |   {token: "eyJhbG..."}       |
 
-3. Server sends JWT to client
-   Server → Client: {token: "eyJhbGc..."}
+2. Authenticated Request
+Client                          Server
+  |───GET /api/profile──────────>|
+  |   Header: Auth: Bearer JWT   |
+  |                              |── Verify JWT signature
+  |                              |── Check expiration
+  |                              |── Extract user ID
+  |<──200 OK + user data─────────|
+  |   {name: "John", ...}        |
 
-4. Client stores JWT (localStorage, memory)
-   Client: Store token
-
-5. Client includes JWT in future requests
-   Client → Server: Authorization: Bearer eyJhbGc...
-
-6. Server verifies JWT signature
-   Server: Verify token signature
-   Server: Extract user info from payload
+3. Expired Token
+Client                          Server
+  |───GET /api/data─────────────>|
+  |   Header: Auth: Bearer JWT   |
+  |                              |── Verify JWT
+  |                              |── Token expired!
+  |<──401 Unauthorized───────────|
+  |   {error: "Token expired"}   |
 ```
+
+**Key Points:**
+- **Login**: User provides credentials, server generates and returns JWT
+- **Authenticated Requests**: Client includes JWT in Authorization header
+- **Token Verification**: Server checks signature and expiration on every request
+- **Expired Tokens**: Server rejects expired tokens with 401 status
 
 ### JWT Implementation (Python/Flask)
 
