@@ -48,361 +48,350 @@ The server will start on `http://localhost:5000`
 
 ## Lab Exercises
 
-### Lab 1: SQL Injection
+### 📚 Available Labs
 
-**Objective:** Find and fix SQL injection vulnerabilities
-
-**Vulnerable Endpoints:**
-- `POST /api/login` - Login endpoint
-- `GET /api/users/<username>` - User lookup
-
-**Tasks:**
-
-1. **Test the vulnerability:**
-   ```bash
-   # Try bypassing authentication
-   curl -X POST http://localhost:5000/api/login \
-     -H "Content-Type: application/json" \
-     -d '{"username": "admin'\'' --", "password": "anything"}'
-   
-   # Try extracting all users
-   curl "http://localhost:5000/api/users/admin'%20OR%20'1'='1"
-   ```
-
-2. **Understand the attack:**
-   - Look at the server logs to see the malicious SQL query
-   - Understand how `--` comments out the rest of the query
-   - Learn about `OR '1'='1'` always-true conditions
-
-3. **Fix the vulnerability:**
-   - Replace string concatenation with parameterized queries
-   - Use `?` placeholders in sqlite3
-   - Never trust user input in SQL queries
-
-4. **Test your fix:**
-   - Verify the attack payloads no longer work
-   - Ensure legitimate queries still work
-   - Check that error messages don't leak SQL info
-
-**Solution Example:**
-
-```python
-# BEFORE (Vulnerable):
-query = f"SELECT * FROM users WHERE username = '{username}'"
-
-# AFTER (Secure):
-query = "SELECT * FROM users WHERE username = ?"
-cursor.execute(query, (username,))
-```
-
-### Lab 2: Cross-Site Scripting (XSS)
-
-**Objective:** Find and prevent XSS attacks
-
-**Vulnerable Endpoints:**
-- `POST /api/comments` - Stored XSS
-- `GET /comments` - XSS execution
-- `GET /api/search` - Reflected XSS
-
-**Tasks:**
-
-1. **Test stored XSS:**
-   ```bash
-   # Inject malicious script
-   curl -X POST http://localhost:5000/api/comments \
-     -H "Content-Type: application/json" \
-     -d '{"text": "<script>alert(\"XSS\")</script>"}'
-   
-   # View comments to execute the script
-   # Open http://localhost:5000/comments in browser
-   ```
-
-2. **Test reflected XSS:**
-   ```bash
-   # Open in browser:
-   http://localhost:5000/api/search?q=<script>alert('XSS')</script>
-   ```
-
-3. **Fix the vulnerabilities:**
-   - Escape HTML output using `markupsafe.escape()` or Jinja2 templates
-   - Sanitize input using `bleach.clean()`
-   - Implement Content Security Policy headers
-   - Use HTTPOnly cookies
-
-4. **Test your fix:**
-   - Verify scripts are escaped (show as text, not executed)
-   - Ensure legitimate HTML is handled properly
-   - Check CSP headers are set
-
-**Solution Example:**
-
-```python
-# BEFORE (Vulnerable):
-html = f"<p>{comment_text}</p>"
-
-# AFTER (Secure):
-from markupsafe import escape
-safe_text = escape(comment_text)
-html = f"<p>{safe_text}</p>"
-
-# Or use templates (Jinja2 auto-escapes):
-return render_template('comments.html', text=comment_text)
-```
-
-### Lab 3: Broken Authentication/Authorization
-
-**Objective:** Implement proper access controls
-
-**Vulnerable Endpoints:**
-- `GET /api/admin/users` - No authentication
-- `DELETE /api/admin/delete-user/<id>` - No authorization
-
-**Tasks:**
-
-1. **Test the vulnerability:**
-   ```bash
-   # Access admin endpoint without authentication
-   curl http://localhost:5000/api/admin/users
-   
-   # Delete a user without permission
-   curl -X DELETE http://localhost:5000/api/admin/delete-user/1
-   ```
-
-2. **Understand the problem:**
-   - No authentication check (who are you?)
-   - No authorization check (what can you do?)
-   - Sensitive data exposure (passwords visible!)
-
-3. **Fix the vulnerabilities:**
-   - Implement JWT or session-based authentication
-   - Add authorization checks for admin routes
-   - Never return passwords in API responses
-   - Use role-based access control (RBAC)
-
-4. **Test your fix:**
-   - Verify endpoints reject unauthenticated requests (401)
-   - Verify endpoints reject unauthorized requests (403)
-   - Confirm passwords are not in responses
-
-**Solution Example:**
-
-```python
-# Add authentication decorator
-from functools import wraps
-from flask import request, jsonify
-
-def require_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token or not validate_token(token):
-            return jsonify({'error': 'Unauthorized'}), 401
-        return f(*args, **kwargs)
-    return decorated
-
-# Add authorization decorator
-def require_admin(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = get_current_user()
-        if user.role != 'admin':
-            return jsonify({'error': 'Forbidden'}), 403
-        return f(*args, **kwargs)
-    return decorated
-
-# Apply to endpoint
-@app.route('/api/admin/users')
-@require_auth
-@require_admin
-def get_all_users():
-    # ... endpoint code
-```
-
-### Lab 4: Rate Limiting
-
-**Objective:** Implement rate limiting to prevent abuse
-
-**Vulnerable Endpoint:**
-- `GET /api/expensive-operation` - No rate limit
-
-**Tasks:**
-
-1. **Test the vulnerability:**
-   ```bash
-   # Send many requests quickly
-   for i in {1..50}; do 
-     curl http://localhost:5000/api/expensive-operation &
-   done
-   ```
-
-2. **Observe the problem:**
-   - Server becomes slow/unresponsive
-   - No limit on number of requests
-   - Could lead to DoS attack
-
-3. **Fix the vulnerability:**
-   - Implement rate limiting using Flask-Limiter
-   - Return 429 status code when limit exceeded
-   - Add rate limit headers
-   - Consider different limits for different endpoints
-
-4. **Test your fix:**
-   - Verify rate limit is enforced
-   - Check for 429 response when limit exceeded
-   - Verify headers include limit info
-
-**Solution Example:**
-
-```python
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-
-limiter = Limiter(
-    app=app,
-    key_func=get_remote_address,
-    default_limits=["100 per hour"]
-)
-
-@app.route('/api/expensive-operation')
-@limiter.limit("10 per minute")
-def expensive_operation():
-    # ... endpoint code
-```
-
-### Lab 5: CORS Misconfiguration
-
-**Objective:** Configure CORS properly
-
-**Current Issue:**
-- `Access-Control-Allow-Origin: *` allows any origin
-
-**Tasks:**
-
-1. **Test the vulnerability:**
-   - Create a malicious webpage that calls the API
-   - Observe that it works (it shouldn't!)
-
-2. **Fix the vulnerability:**
-   - Whitelist specific origins only
-   - Validate Origin header before reflecting
-   - Don't use `*` in production
-
-3. **Test your fix:**
-   - Verify allowed origins can access API
-   - Verify unauthorized origins are blocked
-
-**Solution Example:**
-
-```python
-ALLOWED_ORIGINS = ['https://myapp.com', 'https://www.myapp.com']
-
-@app.after_request
-def add_cors_headers(response):
-    origin = request.headers.get('Origin')
-    if origin in ALLOWED_ORIGINS:
-        response.headers['Access-Control-Allow-Origin'] = origin
-    return response
-```
-
-## Testing Your Fixes
-
-### Manual Testing Checklist
-
-After fixing all vulnerabilities, verify:
-
-- [ ] SQL injection attacks fail gracefully
-- [ ] XSS payloads are escaped or sanitized
-- [ ] Protected endpoints require authentication
-- [ ] Admin actions require admin role
-- [ ] Rate limiting prevents abuse
-- [ ] CORS only allows trusted origins
-- [ ] Error messages don't leak sensitive info
-- [ ] Passwords are hashed and never returned
-- [ ] Security headers are set
-- [ ] All user input is validated
-
-### Automated Testing
-
-Create a test script:
-
-```python
-# test_security.py
-import requests
-import json
-
-BASE_URL = 'http://localhost:5000'
-
-def test_sql_injection():
-    """Test that SQL injection is prevented"""
-    response = requests.post(
-        f'{BASE_URL}/api/login',
-        json={'username': "admin' --", 'password': 'anything'}
-    )
-    assert response.status_code == 401, "SQL injection should not bypass auth"
-    print("✓ SQL injection prevented")
-
-def test_xss():
-    """Test that XSS is prevented"""
-    response = requests.post(
-        f'{BASE_URL}/api/comments',
-        json={'text': '<script>alert("XSS")</script>'}
-    )
-    # Script should be escaped in response
-    assert '<script>' not in response.text, "XSS should be escaped"
-    print("✓ XSS prevented")
-
-def test_authentication():
-    """Test that authentication is required"""
-    response = requests.get(f'{BASE_URL}/api/admin/users')
-    assert response.status_code in [401, 403], "Should require authentication"
-    print("✓ Authentication required")
-
-def test_rate_limiting():
-    """Test that rate limiting works"""
-    for i in range(15):
-        response = requests.get(f'{BASE_URL}/api/expensive-operation')
-    assert response.status_code == 429, "Should be rate limited"
-    print("✓ Rate limiting works")
-
-if __name__ == '__main__':
-    print("Running security tests...")
-    test_sql_injection()
-    test_xss()
-    test_authentication()
-    test_rate_limiting()
-    print("\n✅ All security tests passed!")
-```
-
-## Additional Resources
-
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [OWASP ZAP](https://www.zaproxy.org/)
-- [Burp Suite](https://portswigger.net/burp/communitydownload)
-- [SQL Injection Cheat Sheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
-- [XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
-
-## Planned Labs
-
-### Future Additions
-
-- **Lab 6:** HTTPS and Certificate Validation
-- **Lab 7:** JWT Token Security
-- **Lab 8:** File Upload Vulnerabilities
-- **Lab 9:** API Key Management
-- **Lab 10:** Mass Assignment Protection
-
-## Support
-
-If you have questions or find issues with the labs:
-1. Review the code and comments carefully
-2. Check the main [API Security module](../09-API-Security/)
-3. Search for solutions to common problems
-4. Experiment and learn by doing!
-
-## Coming Soon
-
-Detailed security labs will be added in future updates!
+Each lab is a complete, hands-on security exercise with vulnerable code, exploitation examples, fixes, and tests.
 
 ---
 
-[← Back to Main](../README.md) | [API Security Module →](../09-API-Security/)
+### [Lab 1: SQL Injection](./lab1-sql-injection/)
+
+**What you'll learn:**
+- How SQL injection attacks work
+- Identifying vulnerable code patterns
+- Exploiting SQL injection safely
+- Implementing parameterized queries
+- Testing security fixes
+
+**Key vulnerabilities:**
+- Authentication bypass
+- Data extraction (OR-based injection)
+- UNION-based SQL injection
+- Information disclosure through errors
+
+**Skills gained:**
+- Writing secure database queries
+- Input validation techniques
+- Error handling best practices
+
+[➡️ Start Lab 1](./lab1-sql-injection/)
+
+---
+
+### [Lab 2: XSS (Cross-Site Scripting) Attacks](./lab2-xss-attacks/)
+
+**What you'll learn:**
+- Different types of XSS (Stored, Reflected, DOM-based)
+- How XSS can steal cookies and session tokens
+- Proper output encoding and escaping
+- Content Security Policy (CSP) implementation
+- Using templating engines securely
+
+**Key vulnerabilities:**
+- Stored XSS in comments
+- Reflected XSS in search
+- Cookie stealing attacks
+- Page defacement
+
+**Skills gained:**
+- HTML/JavaScript escaping
+- Input sanitization
+- CSP configuration
+- HTTPOnly cookie security
+
+[➡️ Start Lab 2](./lab2-xss-attacks/)
+
+---
+
+### [Lab 3: Broken Authentication](./lab3-broken-authentication/)
+
+**What you'll learn:**
+- Common authentication vulnerabilities
+- Password storage best practices (bcrypt, salting)
+- Secure session management
+- JWT implementation and security
+- Multi-factor authentication concepts
+
+**Key vulnerabilities:**
+- Weak password storage
+- Predictable session tokens
+- No account lockout
+- Session fixation
+- Insecure JWT implementation
+
+**Skills gained:**
+- Implementing bcrypt password hashing
+- Creating secure session tokens
+- JWT best practices
+- Rate limiting login attempts
+
+[➡️ Start Lab 3](./lab3-broken-authentication/)
+
+---
+
+### [Lab 4: API Security Testing with OWASP ZAP](./lab4-api-security-testing/)
+
+**What you'll learn:**
+- Using OWASP ZAP for security testing
+- Automated vulnerability scanning
+- Manual penetration testing techniques
+- Interpreting scan results
+- Generating security reports
+
+**Key skills:**
+- Installing and configuring ZAP
+- Running automated scans
+- Manual request testing
+- Fuzzing endpoints
+- CI/CD integration
+
+**Tools covered:**
+- OWASP ZAP
+- Proxy interception
+- Spider/crawler
+- Active scanning
+- Report generation
+
+[➡️ Start Lab 4](./lab4-api-security-testing/)
+
+---
+
+### [Lab 5: Rate Limiting](./lab5-rate-limiting/)
+
+**What you'll learn:**
+- Why rate limiting is critical
+- Different rate limiting algorithms (Token Bucket, Leaky Bucket, Sliding Window)
+- Implementing rate limiters with Flask-Limiter
+- Testing rate limiters
+- Bypass techniques (for educational purposes)
+
+**Key concepts:**
+- Fixed window vs sliding window
+- Token bucket algorithm
+- Redis-backed rate limiting
+- Per-user vs per-IP limiting
+- Handling rate limit responses
+
+**Skills gained:**
+- Implementing production-ready rate limiters
+- Load testing APIs
+- Preventing DoS attacks
+- Building resilient client applications
+
+[➡️ Start Lab 5](./lab5-rate-limiting/)
+
+## 📋 Lab Overview Matrix
+
+| Lab | Topic | Difficulty | Time | Tools Used |
+|-----|-------|------------|------|------------|
+| 1 | SQL Injection | Beginner | 2-3 hours | Python, Flask, sqlite3 |
+| 2 | XSS Attacks | Beginner | 2-3 hours | Python, Flask, JavaScript |
+| 3 | Broken Authentication | Intermediate | 3-4 hours | Python, Flask, JWT, bcrypt |
+| 4 | API Security Testing | Intermediate | 3-4 hours | OWASP ZAP, Python, Flask |
+| 5 | Rate Limiting | Intermediate | 2-3 hours | Python, Flask-Limiter, Redis |
+
+**Total Time:** 12-17 hours
+
+## 🎯 Learning Path
+
+**Recommended Order:**
+
+1. **Start with Lab 1 (SQL Injection)** - Foundation for understanding input validation
+2. **Then Lab 2 (XSS)** - Builds on injection concepts, focuses on output encoding
+3. **Move to Lab 3 (Authentication)** - Critical for protecting all endpoints
+4. **Continue with Lab 5 (Rate Limiting)** - Complements authentication for defense in depth
+5. **Finish with Lab 4 (ZAP Testing)** - Comprehensive testing of all learned concepts
+
+**Alternative Path for Tool-First Learners:**
+
+1. Lab 4 (OWASP ZAP) - Learn the tool
+2. Use ZAP while doing Labs 1, 2, 3, 5
+3. See vulnerabilities from both perspectives
+
+## 🛠️ General Setup
+
+### Install All Dependencies
+
+```bash
+# Navigate to security-labs
+cd security-labs
+
+# Install all required packages
+pip install flask requests pytest markupsafe bleach pyjwt bcrypt flask-limiter redis flask-cors
+
+# Optional: Install OWASP ZAP (for Lab 4)
+# Download from https://www.zaproxy.org/download/
+```
+
+### Verify Installation
+
+```bash
+python3 --version  # Should be 3.7+
+python3 -c "import flask; print(flask.__version__)"
+python3 -c "import jwt; print(jwt.__version__)"
+```
+
+## 🧪 Testing Your Fixes
+
+Each lab includes its own test suite, but you can also test all labs comprehensively:
+
+### Manual Testing Checklist
+
+After completing all labs, verify:
+
+- [ ] SQL injection attacks fail gracefully (Lab 1)
+- [ ] XSS payloads are escaped or sanitized (Lab 2)
+- [ ] Protected endpoints require authentication (Lab 3)
+- [ ] Admin actions require admin role (Lab 3)
+- [ ] Rate limiting prevents abuse (Lab 5)
+- [ ] Error messages don't leak sensitive info (All labs)
+- [ ] Passwords are hashed and never returned (Lab 3)
+- [ ] Security headers are set (Lab 2)
+- [ ] All user input is validated (Labs 1, 2)
+- [ ] ZAP scans show no high-severity issues (Lab 4)
+
+## 📚 Additional Resources
+
+### OWASP Resources
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [OWASP ZAP](https://www.zaproxy.org/)
+
+### Security Tools
+- [Burp Suite Community Edition](https://portswigger.net/burp/communitydownload)
+- [sqlmap](http://sqlmap.org/) - SQL injection testing
+- [XSStrike](https://github.com/s0md3v/XSStrike) - XSS detection
+- [Nuclei](https://github.com/projectdiscovery/nuclei) - Vulnerability scanner
+
+### Learning Resources
+- [PortSwigger Web Security Academy](https://portswigger.net/web-security) - Free training
+- [OWASP WebGoat](https://owasp.org/www-project-webgoat/) - Interactive security lessons
+- [HackTheBox](https://www.hackthebox.com/) - Practical hacking challenges
+- [TryHackMe](https://tryhackme.com/) - Guided security learning
+
+### Books
+- "The Web Application Hacker's Handbook" by Dafydd Stuttard & Marcus Pinto
+- "Web Security Testing Cookbook" by Paco Hope & Ben Walther
+- "API Security in Action" by Neil Madden
+
+## 🎓 Certification Paths
+
+If you enjoy these labs, consider pursuing:
+
+- **CEH (Certified Ethical Hacker)** - General penetration testing
+- **OSCP (Offensive Security Certified Professional)** - Advanced pentesting
+- **GWAPT (GIAC Web Application Penetration Tester)** - Web app security
+- **eWPT (eLearnSecurity Web Application Penetration Tester)** - Practical web security
+
+## 💡 Tips for Success
+
+1. **Take Notes:** Document what you learn in each lab
+2. **Try Bypasses:** After fixing, try to bypass your own fixes
+3. **Read the Code:** Don't just run exploits - understand the vulnerable code
+4. **Compare Versions:** Study the differences between vulnerable and fixed code
+5. **Experiment:** Modify the code and see what breaks or improves security
+6. **Use Tools:** Get comfortable with security testing tools
+7. **Stay Updated:** Security is constantly evolving
+
+## 🤝 Contributing
+
+Found an issue or want to add a lab? See [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+Suggestions for new labs:
+- CSRF (Cross-Site Request Forgery)
+- XML External Entity (XXE) Injection
+- Server-Side Request Forgery (SSRF)
+- Insecure Deserialization
+- File Upload Vulnerabilities
+- Command Injection
+- LDAP Injection
+
+## ❓ Troubleshooting
+
+### Common Issues
+
+**Issue:** "Module not found" error
+```bash
+# Solution: Install missing package
+pip install <package-name>
+```
+
+**Issue:** Port already in use
+```bash
+# Solution: Change port in the app or kill the process
+# Change port:
+app.run(port=5010)
+
+# Or kill process:
+# Linux/Mac: lsof -ti:5000 | xargs kill
+# Windows: netstat -ano | findstr :5000, then taskkill /PID <PID>
+```
+
+**Issue:** Database locked error
+```bash
+# Solution: Delete and reinitialize database
+rm *.db
+# Restart the app (it will recreate the database)
+```
+
+**Issue:** ZAP won't connect
+```bash
+# Solution: Check firewall settings and proxy configuration
+# Verify ZAP is running on correct port (usually 8080)
+```
+
+## 📞 Support
+
+If you have questions:
+1. Check the lab's README for specific guidance
+2. Review the [main FAQ](../FAQ.md)
+3. Search for similar issues in the repository
+4. Open an issue with details about your problem
+
+## 🏆 Completion Certificate
+
+After completing all labs:
+
+1. Take screenshots of successful test runs
+2. Document key learnings in a blog post or notes
+3. Apply these skills to review your own projects
+4. Share your experience with the community
+
+**You're now equipped to:**
+- Identify common web vulnerabilities
+- Perform basic security testing
+- Implement secure coding practices
+- Use industry-standard security tools
+- Think like a security professional
+
+## 🌟 Next Steps
+
+After completing these security labs:
+
+1. **Review Course Modules:**
+   - [06. Authentication and Authorization](../06-Authentication-and-Authorization/)
+   - [09. API Security](../09-API-Security/)
+   - [13. Network Security Best Practices](../13-Network-Security-Best-Practices/)
+
+2. **Build Secure Projects:**
+   - Apply security principles to the course projects
+   - Add authentication to your URL shortener
+   - Secure your real-time chat application
+
+3. **Continue Learning:**
+   - Study OWASP Top 10 in depth
+   - Practice on platforms like HackTheBox
+   - Contribute to security tools
+   - Stay updated with security news
+
+4. **Get Certified:**
+   - Consider security certifications
+   - Build a security portfolio
+   - Participate in bug bounty programs (ethically!)
+
+---
+
+**Remember:** With great power comes great responsibility. Use your security knowledge ethically and only test systems you own or have explicit permission to test.
+
+**Happy (Ethical) Hacking! 🛡️**

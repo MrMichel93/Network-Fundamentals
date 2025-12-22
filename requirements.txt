@@ -15,6 +15,22 @@ asyncio>=3.4.3
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 
+# Security Labs Dependencies
+# Lab 2 (XSS)
+markupsafe>=2.1.0
+bleach>=6.0.0
+
+# Lab 3 (Authentication)
+pyjwt>=2.8.0
+bcrypt>=4.0.0
+
+# Lab 5 (Rate Limiting)
+flask-limiter>=3.5.0
+redis>=5.0.0
+
+# Additional security tools
+flask-cors>=4.0.0
+
 # Optional: Pretty printing JSON
 jq>=1.6.0
 
